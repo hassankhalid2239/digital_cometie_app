@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:digital_cometie_app/Views/notification_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import '../message_screen.dart';
 
 
 class NotificationServices {
@@ -174,7 +173,7 @@ class NotificationServices {
 
     if(message.notification!=null){
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => MessageScreen(
+          MaterialPageRoute(builder: (context) => NotificationScreen(
             title: message.notification!.title.toString() ,
             body: message.notification!.body.toString(),
           )));
