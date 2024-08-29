@@ -104,23 +104,23 @@ class _HomeState extends State<Home> {
                   backgroundColor: WidgetStatePropertyAll(Colors.blue)
               ),
               onPressed: (){
-                // _notificationServices.sendNotificationToSelectedStudents(
-                //   _titleController.text.toString(),
-                //   _bodyController.text.toString(),
-                //   _selectedUsers
-                // );
-                // if(_titleController.text!='' && _bodyController.text !=''){
-                //   NotificationServices().sendNotificationToSelectedStudents(
-                //     _titleController.text,
-                //     _bodyController.text,
-                //       _selectedUsers
-                //   );
-                //   _selectedUsers.clear();
-                // }else{
-                //   Fluttertoast.showToast(
-                //     msg: 'Please enter title, body, and select students.',
-                //   );
-                // }
+                _notificationServices.sendNotificationToSelectedStudents(
+                  _titleController.text.toString(),
+                  _bodyController.text.toString(),
+                  _selectedUsers
+                );
+                if(_titleController.text!='' && _bodyController.text !=''){
+                  NotificationServices().sendNotificationToSelectedStudents(
+                    _titleController.text,
+                    _bodyController.text,
+                      _selectedUsers
+                  );
+                  _selectedUsers.clear();
+                }else{
+                  Fluttertoast.showToast(
+                    msg: 'Please enter title, body, and select students.',
+                  );
+                }
               },
               child: const Text('Send Notification',style: TextStyle(color: Colors.white),),
             ),
