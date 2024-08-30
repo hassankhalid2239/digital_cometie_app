@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import '../Modals/user_model.dart';
 import '../Views/Auth/otp_screen.dart';
 import '../services/notification_services.dart';
-import 'data_controller.dart';
+import 'notification_controller.dart';
 
 class AuthController extends GetxController {
   RxBool loading = false.obs;
@@ -85,7 +85,6 @@ class AuthController extends GetxController {
       loading.value = false;
     }
   }
-
   void verifyOtp({
     required BuildContext context,
     required String verificationId,
@@ -118,7 +117,6 @@ class AuthController extends GetxController {
       loading.value = false;
     }
   }
-
   Future<bool> checkExitingUser() async {
     DocumentSnapshot snapshot =
         await _firestore.collection('Users').doc(_uid).get();
@@ -133,7 +131,6 @@ class AuthController extends GetxController {
       return false;
     }
   }
-
   void storeUserData(
       {required BuildContext context,
       required UserModel userModel,
@@ -176,7 +173,6 @@ class AuthController extends GetxController {
       loading.value = false;
     }
   }
-
   Future getUserData() async {
     await _firestore
         .collection('Users')
@@ -194,12 +190,29 @@ class AuthController extends GetxController {
       _uid = _userModel.value.uid;
     });
   }
+  Future<String?> getUserToken(String documentId) async {
+    try {
+      // Firestore collection reference
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('UserToken') // Replace with your collection name
+          .doc(documentId)
+          .get();
 
+      if (documentSnapshot.exists) {
+        // Assuming the token is stored with the key 'token' in the document
+        return documentSnapshot.get('token');
+      } else {
+        print("Document does not exist");
+        return null;
+      }
+    } catch (e) {
+      print("Error fetching token: $e");
+      return null;
+    }
+  }
   Future userSignOut() async {
     await _auth.signOut();
   }
-
-
   Future pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -220,7 +233,6 @@ class AuthController extends GetxController {
       );
     }
   }
-
   Future pickImageCamera() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
@@ -241,7 +253,6 @@ class AuthController extends GetxController {
       );
     }
   }
-
   Future cropImage(filePath) async {
     CroppedFile? croppedImage = await ImageCropper()
         .cropImage(sourcePath: filePath, maxHeight: 1080, maxWidth: 1080);
@@ -254,7 +265,6 @@ class AuthController extends GetxController {
       print('Updatedddddddddddd');
     }
   }
-
   Future uploadProfileData() async {
     try {
       loading.value=true;
@@ -319,7 +329,6 @@ class AuthController extends GetxController {
     }
 
   }
-
   void deletePF() {
     final User? user = _auth.currentUser;
     final uid = user!.uid;
@@ -354,6 +363,11 @@ class AuthController extends GetxController {
       );
     }
   }
+
+
+
+
+
 }
 
 

@@ -50,7 +50,10 @@ class CometieInfoScreen extends StatelessWidget {
               elevation: 10,
               shadowColor: Colors.black,
               child: StreamBuilder(
-                stream: _cometieController.getCometieDetail(cometieId),
+                stream: FirebaseFirestore.instance
+                    .collection('Cometies')
+                    .doc(cometieId)
+                    .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());

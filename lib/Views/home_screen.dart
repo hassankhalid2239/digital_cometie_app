@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:digital_cometie_app/Controller/notification_controller.dart';
+import 'package:digital_cometie_app/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../Controller/auth_controller.dart';
-import '../Controller/data_controller.dart';
+import '../Controller/cometie_controller.dart';
 import '../services/notification_services.dart';
 import 'Auth/sign_up_screen.dart';
 import 'notification_screen.dart';
@@ -19,17 +21,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _authController=Get.put(AuthController());
-  final _data=Get.put(DataController());
+  final _cometieController=Get.put(CometieController());
   final _notificationServices = NotificationServices();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _notificationServices.requestNotificationPermission();
-    _notificationServices.getDeviceToken().then((token)=>print('ToKen:${token.toString()}'));
     _notificationServices.firebaseInit(context);
     _notificationServices.setupInteractMessage(context);
-    _data.getData();
     _authController.getUserData();
   }
   @override
@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => NotificationScreen()));
+                                    builder: (context) => NotificationListScreen()));
                           },
                           icon: const Icon(
                             Icons.notifications_none_rounded,
@@ -196,7 +196,65 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 height: 25,
                                                 width: 60,
                                                 child: ElevatedButton(
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      barrierDismissible: false,
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                              backgroundColor: Color(0xffE9F0FF),
+                                                              title: Text(
+                                                                'Join Cometie',
+                                                                style: GoogleFonts.alef(
+                                                                    color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+                                                              ),
+                                                              contentPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                                                              content: Text('Would you like to join this cometie?',style: GoogleFonts.alef(fontWeight: FontWeight.w400,fontSize: 15),),
+                                                            actionsPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: (){
+                                                                  _cometieController.checkPreviousRequest(snapshot.data?.docs[index]['cometieId']).then((value){
+                                                                    if(value==true){
+                                                                      Navigator.pop(context);
+                                                                      Utils().showToastMessage('Already request sent!');
+                                                                    }else{
+                                                                      _authController.loading.value==true;
+                                                                      Notifications().sendJoinOffer(
+                                                                          snapshot.data?.docs[index]['cometieName'],
+                                                                          snapshot.data?.docs[index]['uid'],
+                                                                          snapshot.data?.docs[index]['cometieId']
+                                                                      );
+                                                                      _authController.loading.value==false;
+                                                                      Navigator.pop(context);
+                                                                      Utils().showSnackBar(context, 'Cometie Join request sent');
+                                                                    }
+                                                                  });
+                                                                },
+                                                                child: Obx((){
+                                                                  if(_authController.loading.value==true){
+                                                                    return const CircularProgressIndicator();
+                                                                  }else{
+                                                                    return Text('Join',style: GoogleFonts.alef(
+                                                                        fontWeight: FontWeight.bold,
+                                                                        fontSize: 18
+                                                                    ),);
+                                                                  }
+                                                                })
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: (){
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                child: Text('Cancel',style: GoogleFonts.alef(
+                                                                    fontWeight: FontWeight.bold,
+                                                                    fontSize: 18
+                                                                ),),
+                                                              )
+                                                            ],
+                                                          );
+                                                        });
+                                                  },
                                                   style: const ButtonStyle(
                                                     padding: WidgetStatePropertyAll(
                                                         EdgeInsets.zero),

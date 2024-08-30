@@ -173,15 +173,12 @@ class NotificationServices {
 
     if(message.notification!=null){
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => NotificationScreen(
-            title: message.notification!.title.toString() ,
-            body: message.notification!.body.toString(),
-          )));
+          MaterialPageRoute(builder: (context) => NotificationListScreen()));
     }
   }
 
 
-  Future<void> sendNotificationToSelectedStudents(String title, String body, List<String> tokens) async {
+  Future<void> sendNotificationToUsers(String title, String body, List<String> tokens) async {
 
     const String fcmUrl = 'https://fcm.googleapis.com/v1/projects/digital-cometie-app-c7294/messages:send';
 

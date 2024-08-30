@@ -1,16 +1,19 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:digital_cometie_app/Controller/state_controller.dart';
+import 'package:digital_cometie_app/services/notification_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../Utils/toast.dart';
+import '../utils.dart';
 import 'auth_controller.dart';
 
 class CometieController extends GetxController{
   final _stateController= Get.put(StateController());
   final _authController= Get.put(AuthController());
   RxBool loading = false.obs;
+  final _notificationServices = NotificationServices();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   RxList members=[].obs;
@@ -63,7 +66,7 @@ class CometieController extends GetxController{
           });
         }
       }
-      Toast().showToastMessage('Cometie upload successfully');
+      Utils().showToastMessage('Cometie upload successfully');
     }on FirebaseAuthException catch(e){
       Get.snackbar(
         'Oh!',
@@ -80,6 +83,20 @@ class CometieController extends GetxController{
     members.clear();
   }
 
+  Future<bool> checkPreviousRequest(String cometieId)async{
+    var document = await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(_authController.userModel.uid)
+        .collection("CometieRequestSent")
+        .doc(cometieId)
+        .get();
+    if(document.exists){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   DateTime calculateReminderDate(DateTime startDate) {
     // Adding 3 months to the input date
     DateTime reminderDate = DateTime(
@@ -89,18 +106,6 @@ class CometieController extends GetxController{
     );
 
     return reminderDate;
-  }
-  Stream<QuerySnapshot> getCometieData() {
-    return FirebaseFirestore.instance
-        .collection('Cometies')
-        .where('uid', isEqualTo: _auth.currentUser!.uid)
-        .snapshots();
-  }
-  Stream<DocumentSnapshot> getCometieDetail(String cometieId) {
-    return FirebaseFirestore.instance
-        .collection('Cometies')
-        .doc(cometieId)
-        .snapshots();
   }
 
 }

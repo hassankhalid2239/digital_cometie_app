@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../Controller/auth_controller.dart';
-import '../Controller/data_controller.dart';
 import '../Controller/state_controller.dart';
 import 'Auth/sign_up_screen.dart';
 import 'cometie_info_screen.dart';
@@ -22,12 +21,10 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final _authController=Get.put(AuthController());
   final _stateController = Get.put(StateController());
-  final _data=Get.put(DataController());
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _data.getData();
     _authController.getUserData();
   }
   @override

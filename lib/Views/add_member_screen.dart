@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:digital_cometie_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -6,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../Controller/cometie_controller.dart';
 import '../Controller/state_controller.dart';
-import '../Utils/toast.dart';
 import '../Widgets/custom_elevated_button.dart';
 import 'main_page.dart';
 
@@ -209,9 +209,9 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                 member['memberUid'] ==
                                     snapshot.data.docs[index]['uid']);
                                 if(isAlreadyAdded){
-                                  Toast().showToastMessage('User Already Added');
+                                  Utils().showToastMessage('User Already Added');
                                 }else if(_cometieController.members.length==_stateController.currentValue.round()){
-                                  Toast().showToastMessage('Only ${_stateController.currentValue.round()} members allowed!');
+                                  Utils().showToastMessage('Only ${_stateController.currentValue.round()} members allowed!');
                                 }
                                 else{
                                   _cometieController.members.add(
