@@ -165,7 +165,7 @@ class _OthersProfileScreenState extends State<OthersProfileScreen> {
                 ),
               ),
               SizedBox(height: 10,),
-              widget.response==''?
+              widget.response=='pending'?
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
@@ -178,7 +178,12 @@ class _OthersProfileScreenState extends State<OthersProfileScreen> {
                             backgroundColor:
                             const WidgetStatePropertyAll(Color(0xff003CBE))),
                         onPressed: () {
-
+                          Notifications().sendAcceptOffer(
+                              widget.cometieName,
+                              widget.id,
+                              widget.cometieIid,
+                              widget.notificationId);
+                          Navigator.pop(context);
                         },
                         child: FittedBox(
                           child: Text(
@@ -233,7 +238,14 @@ class _OthersProfileScreenState extends State<OthersProfileScreen> {
                   ],
                 ),
               ) :
-              const Text('Rejected')
+                  widget.response=='cancel'?
+              Text('Rejected',style: GoogleFonts.alef(
+                color: Colors.red,
+                fontSize: 20
+              ),):Text('Accepted',style: GoogleFonts.alef(
+                      color: Colors.green,
+                      fontSize: 20
+                  ))
             ],
           );
         },

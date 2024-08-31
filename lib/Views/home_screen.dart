@@ -131,77 +131,78 @@ class _HomeScreenState extends State<HomeScreen> {
                               scrollDirection: Axis.horizontal,
                               itemCount: snapshot.data?.docs.length,
                               itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: SizedBox(
-                                    width: 160,
-                                    child: Card(
-                                      margin: const EdgeInsets.symmetric(vertical: 15),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20)),
-                                      color: const Color(0xffE9F0FF),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 8),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            CircleAvatar(
-                                              radius: 30,
-                                              backgroundImage: snapshot.data?.docs[index]['creatorProfilePic']==''?
-                                              AssetImage('assets/images/pfavatar.png'):
-                                              NetworkImage(snapshot.data?.docs[index]['creatorProfilePic']),
-                                            ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
+                                if(snapshot.data?.docs[index]['uid']!=_authController.userModel.uid){
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    child: SizedBox(
+                                      width: 160,
+                                      child: Card(
+                                        margin: const EdgeInsets.symmetric(vertical: 15),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(20)),
+                                        color: const Color(0xffE9F0FF),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 8),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              CircleAvatar(
+                                                radius: 30,
+                                                backgroundImage: snapshot.data?.docs[index]['creatorProfilePic']==''?
+                                                AssetImage('assets/images/pfavatar.png'):
+                                                NetworkImage(snapshot.data?.docs[index]['creatorProfilePic']),
+                                              ),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
                                                 snapshot.data?.docs[index]['cometieName'],
-                                              // 'Name',
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.roboto(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 18,
-                                                  color: Colors.black),
-                                            ),
-                                            Text(
+                                                // 'Name',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.roboto(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 18,
+                                                    color: Colors.black),
+                                              ),
+                                              Text(
                                                 snapshot.data?.docs[index]['creatorLocation'],
-                                              // 'Location',
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.roboto(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 18,
-                                                  color: Colors.black),
-                                            ),
-                                            Text(
+                                                // 'Location',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.roboto(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 18,
+                                                    color: Colors.black),
+                                              ),
+                                              Text(
                                                 '${snapshot.data?.docs[index]['duration'].toString()} Months',
-                                              // 'Duration',
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.roboto(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 18,
-                                                  color: Colors.black),
-                                            ),
-                                            Text(
-                                              '${snapshot.data?.docs[index]['eachAmount'].toString()}',
-                                              overflow: TextOverflow.ellipsis,// 'Amount',
-                                              style: GoogleFonts.roboto(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 18,
-                                                  color: Colors.black),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.bottomRight,
-                                              child: SizedBox(
-                                                height: 25,
-                                                width: 60,
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    showDialog(
-                                                      barrierDismissible: false,
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return AlertDialog(
+                                                // 'Duration',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.roboto(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 18,
+                                                    color: Colors.black),
+                                              ),
+                                              Text(
+                                                '${snapshot.data?.docs[index]['eachAmount'].toString()}',
+                                                overflow: TextOverflow.ellipsis,// 'Amount',
+                                                style: GoogleFonts.roboto(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 18,
+                                                    color: Colors.black),
+                                              ),
+                                              Align(
+                                                alignment: Alignment.bottomRight,
+                                                child: SizedBox(
+                                                  height: 25,
+                                                  width: 60,
+                                                  child: ElevatedButton(
+                                                    onPressed: () {
+                                                      showDialog(
+                                                          barrierDismissible: false,
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDialog(
                                                               backgroundColor: Color(0xffE9F0FF),
                                                               title: Text(
                                                                 'Join Cometie',
@@ -210,74 +211,76 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               ),
                                                               contentPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
                                                               content: Text('Would you like to join this cometie?',style: GoogleFonts.alef(fontWeight: FontWeight.w400,fontSize: 15),),
-                                                            actionsPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-                                                            actions: [
-                                                              TextButton(
-                                                                onPressed: (){
-                                                                  _cometieController.checkPreviousRequest(snapshot.data?.docs[index]['cometieId']).then((value){
-                                                                    if(value==true){
-                                                                      Navigator.pop(context);
-                                                                      Utils().showToastMessage('Already request sent!');
-                                                                    }else{
-                                                                      _authController.loading.value==true;
-                                                                      Notifications().sendJoinOffer(
-                                                                          snapshot.data?.docs[index]['cometieName'],
-                                                                          snapshot.data?.docs[index]['uid'],
-                                                                          snapshot.data?.docs[index]['cometieId']
-                                                                      );
-                                                                      _authController.loading.value==false;
-                                                                      Navigator.pop(context);
-                                                                      Utils().showSnackBar(context, 'Cometie Join request sent');
-                                                                    }
-                                                                  });
-                                                                },
-                                                                child: Obx((){
-                                                                  if(_authController.loading.value==true){
-                                                                    return const CircularProgressIndicator();
-                                                                  }else{
-                                                                    return Text('Join',style: GoogleFonts.alef(
-                                                                        fontWeight: FontWeight.bold,
-                                                                        fontSize: 18
-                                                                    ),);
-                                                                  }
-                                                                })
-                                                              ),
-                                                              TextButton(
-                                                                onPressed: (){
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Text('Cancel',style: GoogleFonts.alef(
-                                                                    fontWeight: FontWeight.bold,
-                                                                    fontSize: 18
-                                                                ),),
-                                                              )
-                                                            ],
-                                                          );
-                                                        });
-                                                  },
-                                                  style: const ButtonStyle(
-                                                    padding: WidgetStatePropertyAll(
-                                                        EdgeInsets.zero),
-                                                    backgroundColor: WidgetStatePropertyAll(
-                                                        Color(0xff003CBE)),
-                                                  ),
-                                                  child: Text(
-                                                    'Add',
-                                                    style: GoogleFonts.alef(
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.w400,
-                                                        color: Colors.white,
-                                                        letterSpacing: 2),
+                                                              actionsPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                                                              actions: [
+                                                                TextButton(
+                                                                    onPressed: (){
+                                                                      _cometieController.checkPreviousRequest(snapshot.data?.docs[index]['cometieId']).then((value){
+                                                                        if(value==true){
+                                                                          Navigator.pop(context);
+                                                                          Utils().showToastMessage('Already request sent!');
+                                                                        }else{
+                                                                          _authController.loading.value==true;
+                                                                          Notifications().sendJoinOffer(
+                                                                              snapshot.data?.docs[index]['cometieName'],
+                                                                              snapshot.data?.docs[index]['uid'],
+                                                                              snapshot.data?.docs[index]['cometieId']
+                                                                          );
+                                                                          _authController.loading.value==false;
+                                                                          Navigator.pop(context);
+                                                                          Utils().showSnackBar(context, 'Cometie Join request sent');
+                                                                        }
+                                                                      });
+                                                                    },
+                                                                    child: Obx((){
+                                                                      if(_authController.loading.value==true){
+                                                                        return const CircularProgressIndicator();
+                                                                      }else{
+                                                                        return Text('Join',style: GoogleFonts.alef(
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontSize: 18
+                                                                        ),);
+                                                                      }
+                                                                    })
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed: (){
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                  child: Text('Cancel',style: GoogleFonts.alef(
+                                                                      fontWeight: FontWeight.bold,
+                                                                      fontSize: 18
+                                                                  ),),
+                                                                )
+                                                              ],
+                                                            );
+                                                          });
+                                                    },
+                                                    style: const ButtonStyle(
+                                                      padding: WidgetStatePropertyAll(
+                                                          EdgeInsets.zero),
+                                                      backgroundColor: WidgetStatePropertyAll(
+                                                          Color(0xff003CBE)),
+                                                    ),
+                                                    child: Text(
+                                                      'Add',
+                                                      style: GoogleFonts.alef(
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w400,
+                                                          color: Colors.white,
+                                                          letterSpacing: 2),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            )
-                                          ],
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
+                                  );
+                                }
+                               return SizedBox();
                               },
                             );
 

@@ -91,17 +91,22 @@ class NotificationListScreen extends StatelessWidget {
                             .collection('Cometies')
                             .doc(snapshot.data?.docs[index]['cometeId'])
                             .get();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    OthersProfileScreen(
+                        if(snapshot.data?.docs[index]['type']=='cometieRequest'){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      OthersProfileScreen(
                                         id: uDoc['senderId'],
-                                      notificationId: snapshot.data.docs[index]['notificationId'],
-                                      cometieIid: snapshot.data?.docs[index]['cometeId'],
-                                      cometieName: snap['cometieName'],
-                                      response: snapshot.data?.docs[index]['response'],
-                                    )));
+                                        notificationId: snapshot.data.docs[index]['notificationId'],
+                                        cometieIid: snapshot.data?.docs[index]['cometeId'],
+                                        cometieName: snap['cometieName'],
+                                        response: snapshot.data?.docs[index]['response'],
+                                      )));
+                        }else{
+                          return;
+                        }
+
                       },
                       // leading: CircleAvatar(
                       //     radius: 22,
