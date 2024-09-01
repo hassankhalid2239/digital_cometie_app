@@ -70,6 +70,9 @@ class CometieInfoScreen extends StatelessWidget {
                           InfoListTile(title: 'Total Months',value:  snapshot.data!['duration'].toString(),),
                           InfoListTile(title: 'Created At',value: DateFormat('EEE, d MMM yyyy').format(snapshot.data!['createdAt'].toDate()),),
                           InfoListTile(title: 'Launched At',value:  DateFormat('EEE, d MMM yyyy').format(snapshot.data!['launchedAt'].toDate()),),
+                          DateFormat('EEE, d MMM yyyy').format(snapshot.data!['completedAt'].toDate())==DateFormat('EEE, d MMM yyyy').format(snapshot.data!['createdAt'].toDate())?
+                          InfoListTile(title: 'Due Date',value:  'Pending',):
+                          InfoListTile(title: 'Due Date',value:  DateFormat('EEE, d MMM yyyy').format(snapshot.data!['completedAt'].toDate()),),
                         ],
                       ),
                     );

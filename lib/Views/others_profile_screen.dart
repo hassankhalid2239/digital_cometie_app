@@ -242,7 +242,8 @@ class _OthersProfileScreenState extends State<OthersProfileScreen> {
               Text('Rejected',style: GoogleFonts.alef(
                 color: Colors.red,
                 fontSize: 20
-              ),):Text('Accepted',style: GoogleFonts.alef(
+              ),):
+                  Text('Accepted',style: GoogleFonts.alef(
                       color: Colors.green,
                       fontSize: 20
                   ))
