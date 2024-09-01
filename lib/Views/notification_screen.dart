@@ -105,6 +105,18 @@ class NotificationListScreen extends StatelessWidget {
                         textColor: _stateController.notifyFilterIndex.value==3?Colors.white:Colors.black
                     );
                   }),
+                  SizedBox(width: 10,),
+                  Obx((){
+                    return CustomFilterButton(
+                        onTap: (){
+                          _stateController.notifyFilterIndex.value=4;
+                        },
+                        title: 'Joined You',
+                        bgColor: _stateController.notifyFilterIndex.value==4?Color(0xff003CBE):Colors.transparent,
+                        borderColor: _stateController.notifyFilterIndex.value==4?Colors.transparent:Colors.grey,
+                        textColor: _stateController.notifyFilterIndex.value==4?Colors.white:Colors.black
+                    );
+                  }),
                 ],
               ),
             ),

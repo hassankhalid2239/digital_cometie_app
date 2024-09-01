@@ -272,21 +272,36 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       bottomNavigationBar: BottomAppBar(
         height: 70,
         color: Colors.white,
-        child: CustomElevatedButton(
-          title: 'Create',
-          onTap: () {
-              _cometieController.storeCometieData(
-                  name: widget.name,
-                  amount: int.parse(widget.amount),
-                  duration: _stateController.currentValue.round(),
-                  status: _stateController.currentValue.value.round()==_cometieController.members.length?'Progress':'Pending'
-              );
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) =>  MainPage()),
-                      (route) => false);
-          },
-        ),
+        child:Obx((){
+          if(_cometieController.loading.value==true){
+            return Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Color(0xff003CBE),
+                  borderRadius: BorderRadius.circular(25)
+              ),
+              child: Center(
+                child: CircularProgressIndicator(color: Colors.white,),
+              ),
+            );
+          }else{
+            return CustomElevatedButton(
+              title: 'Create',
+              onTap: () {
+                _cometieController.storeCometieData(
+                    name: widget.name,
+                    amount: int.parse(widget.amount),
+                    duration: _stateController.currentValue.round(),
+                    status: _stateController.currentValue.value.round()==_cometieController.members.length?'Progress':'Pending'
+                );
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  MainPage()),
+                        (route) => false);
+              },
+            );
+          }
+        })
       ),
     );
   }

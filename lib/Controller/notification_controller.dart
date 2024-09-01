@@ -53,6 +53,15 @@ class Notifications{
           .where('type', isEqualTo: 'cancelRequest')
           .orderBy('arrived', descending: true)
           .snapshots();
+    }
+    else if(_stateController.notifyFilterIndex.value==4){
+      return FirebaseFirestore.instance
+          .collection('Users')
+          .doc(_authController.userModel.uid)
+          .collection('Notifications')
+          .where('type', isEqualTo: 'Added')
+          .orderBy('arrived', descending: true)
+          .snapshots();
     }else{
       return FirebaseFirestore.instance
           .collection('Users')
@@ -135,6 +144,9 @@ class Notifications{
         "memberName": user['name'],
         "memberProfilePic":user['profilePic'],
         "memberPhone":user['phone'],
+      });
+      _firestore.collection('Users').doc(receiverId).collection('JoinedCometies').doc(id).set({
+        "cometieId":cometieId,
       });
       for(int j=0;j<cometie['duration'];j++){
         _firestore.collection('Cometies').doc(cometieId).collection('Members').doc(receiverId).collection('Payments').doc('Payment ${j+1}').set({

@@ -139,7 +139,7 @@ class CometieScreen extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Amount: ${snapshot.data?.docs[index]['amount']} mon',
+                                          'Amount: ${snapshot.data?.docs[index]['amount']}',
                                           style: GoogleFonts.roboto(
                                             // fontSize: 18,
                                               fontWeight: FontWeight.w400,

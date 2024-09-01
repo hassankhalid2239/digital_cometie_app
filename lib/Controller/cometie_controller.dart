@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:digital_cometie_app/Controller/state_controller.dart';
 import 'package:digital_cometie_app/services/notification_services.dart';
@@ -8,12 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../utils.dart';
 import 'auth_controller.dart';
+import 'package:async/async.dart';
+import 'package:rxdart/rxdart.dart';
 
 class CometieController extends GetxController{
   final _stateController= Get.put(StateController());
   final _authController= Get.put(AuthController());
+  final  _notificationServices= NotificationServices();
   RxBool loading = false.obs;
-  final _notificationServices = NotificationServices();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   RxList members=[].obs;
@@ -25,8 +26,28 @@ class CometieController extends GetxController{
     required int duration,
     required String status,
 })async{
+  loading.value=true;
+    String id = DateTime.now().millisecondsSinceEpoch.toString();
+    for(int i=0;i<members.length;i++){
+      if(members[i]['memberUid']!=_auth.currentUser!.uid){
+        await _firestore.collection('UserToken').doc(members[i]['memberUid']).get().then((snap){
+          String token=snap['token'];
+          _notificationServices.sendNotificationToUsers('${_authController.userModel.name} added you.', 'Now you are the member of $name.', [token]);
+          _firestore.collection('Users').doc(members[i]['memberUid']).collection('Notifications').doc(id).set({
+            'senderId': _authController.userModel.uid,
+            'cometeId': id,
+            'title' : '${_authController.userModel.name} added you.',
+            'body': 'Now you are the member of $name.',
+            'arrived':DateTime.now(),
+            'notificationId': id,
+            'response':'acceptRequest',
+            'type': 'Added'
+          });
+        });
+      }
+    }
       DateTime completeDate=calculateReminderDate(Timestamp.now().toDate());
-      String id = DateTime.now().millisecondsSinceEpoch.toString();
+
     try{
       await _firestore.collection('Cometies').doc(id).set({
         "cometieName":name,
@@ -41,10 +62,14 @@ class CometieController extends GetxController{
         "launchedAt":members.length==_stateController.currentValue.round()?
             Timestamp.now():Timestamp.now(),
         "createdAt":Timestamp.now(),
-        "completedAt":Timestamp.now(),
+        "completedAt":members.length==_stateController.currentValue.round()?
+        calculateReminderDate(Timestamp.now().toDate()):Timestamp.now()
       });
 
       for(int i=0; i<members.length; i++){
+        _firestore.collection('Users').doc(members[i]['memberUid']).collection('JoinedCometies').doc(id).set({
+          "cometieId":id,
+        });
         _firestore.collection('Cometies').doc(id).collection('Members').doc(members[i]['memberUid']).set({
           "memberUid":members[i]['memberUid'],
           "memberName":members[i]['memberName'],
@@ -81,6 +106,7 @@ class CometieController extends GetxController{
       );
     }
     members.clear();
+  loading.value=false;
   }
 
   Future<bool> checkPreviousRequest(String cometieId)async{
@@ -129,5 +155,33 @@ class CometieController extends GetxController{
     }
 
   }
+
+
+  Stream<List<DocumentSnapshot<Map<String, dynamic>>>> getCometiesReport() async* {
+    // Get the IDs of the cometies the user has joined
+    var cometieSnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(_auth.currentUser!.uid)
+        .collection('JoinedCometies')
+        .get();
+
+    // Collect cometie IDs
+    List<String> cometieKeys = cometieSnapshot.docs.map((doc) => doc.id).toList();
+
+    // If no cometie keys are found, yield an empty list
+    if (cometieKeys.isEmpty) {
+      yield [];
+      return;
+    }
+
+    // Stream for each cometie document
+    List<Stream<DocumentSnapshot<Map<String, dynamic>>>> cometieStreams = cometieKeys.map((id) {
+      return FirebaseFirestore.instance.collection('Cometies').doc(id).snapshots();
+    }).toList();
+
+    // Combine all streams into one that emits a list of snapshots
+    yield* CombineLatestStream.list(cometieStreams).map((snapshots) => snapshots);
+  }
+
 
 }

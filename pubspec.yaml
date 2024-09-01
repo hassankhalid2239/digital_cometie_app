@@ -55,6 +55,7 @@ dependencies:
   image_cropper:
   intl:
   flutter_animate:
+  rxdart:
 dev_dependencies:
   flutter_test:
     sdk: flutter
