@@ -108,4 +108,26 @@ class CometieController extends GetxController{
     return reminderDate;
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> getCometies() {
+    if(_stateController.cometieFilterIndex.value==1){
+      return FirebaseFirestore.instance
+          .collection('Cometies')
+          .where('status', whereIn: ['Progress', 'Completed'])
+          .orderBy('createdAt',)
+          .snapshots();
+    }else if(_stateController.cometieFilterIndex.value==2){
+      return FirebaseFirestore.instance
+          .collection('Cometies')
+          .where('status', whereIn: ['Progress', 'Completed'])
+          .orderBy('creatorLocation')
+          .snapshots();
+    }else{
+      return FirebaseFirestore.instance
+          .collection('Cometies')
+          .where('status', whereIn: ['Progress', 'Completed'])
+          .snapshots();
+    }
+
+  }
+
 }

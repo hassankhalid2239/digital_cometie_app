@@ -29,7 +29,7 @@ class MainPage extends StatelessWidget {
           index: _stateController.getPageIndex.value,
           children: [
             const HomeScreen(),
-            const CometieScreen(),
+            CometieScreen(),
             const SizedBox(),
             ReportScreen(),
             ProfileScreen(),

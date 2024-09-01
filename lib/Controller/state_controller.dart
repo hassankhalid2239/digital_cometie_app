@@ -1,8 +1,6 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
 
 class StateController extends GetxController {
@@ -12,6 +10,8 @@ class StateController extends GetxController {
   RxInt profileFilterCometie=0.obs;
   final Rx<PageController> pageController = PageController().obs;
   RxInt notifyFilterIndex = 0.obs;
+  RxInt reportFilterIndex = 0.obs;
+  RxInt cometieFilterIndex = 0.obs;
 
   RxString searchQuery = 'Search query'.obs;
 

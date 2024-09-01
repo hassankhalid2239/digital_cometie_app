@@ -6,11 +6,13 @@ class CustomElevatedButton extends StatelessWidget {
   final VoidCallback onTap;
   final Color bgColor;
   final Color titleColor;
+  final Color borderColor;
   final double btnElevation;
   final double titleSize;
   const CustomElevatedButton(
       {super.key,
       required this.title,
+      this.borderColor=Colors.transparent,
       this.titleSize = 25,
       required this.onTap,
       this.bgColor = const Color(0xff003CBE),
@@ -23,6 +25,7 @@ class CustomElevatedButton extends StatelessWidget {
     return ElevatedButton(
         onPressed: onTap,
         style: ButtonStyle(
+          side: WidgetStatePropertyAll(BorderSide(width: 1,color: borderColor)),
           elevation: WidgetStatePropertyAll(btnElevation),
           backgroundColor: WidgetStatePropertyAll(bgColor),
         ),
