@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:digital_cometie_app/Controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../Controller/notification_controller.dart';
-import '../Controller/state_controller.dart';
+import '../../Controller/notification_controller.dart';
 
 
 
@@ -25,12 +22,9 @@ class OthersProfileScreen extends StatefulWidget {
 
 class _OthersProfileScreenState extends State<OthersProfileScreen> {
   final ScrollController scController = ScrollController();
-  final _authController = Get.put(AuthController());
-  final _stateController = Get.put(StateController());
   String? _name;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getName();
 
@@ -164,7 +158,7 @@ class _OthersProfileScreenState extends State<OthersProfileScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               widget.response=='pending'?
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -205,7 +199,7 @@ class _OthersProfileScreenState extends State<OthersProfileScreen> {
                     Expanded(
                       child: ElevatedButton(
                         style: ButtonStyle(
-                            side: WidgetStatePropertyAll(BorderSide(color: Color(0xff003CBE),width: 1)),
+                            side: const WidgetStatePropertyAll(BorderSide(color: Color(0xff003CBE),width: 1)),
                             shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25))),
                             backgroundColor:

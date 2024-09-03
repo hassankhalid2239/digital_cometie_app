@@ -10,8 +10,8 @@ import '../Controller/auth_controller.dart';
 import '../Controller/cometie_controller.dart';
 import '../services/notification_services.dart';
 import 'Auth/sign_up_screen.dart';
-import 'cometie_info_screen.dart';
-import 'notification_screen.dart';
+import 'my_cometie_info_screen.dart';
+import 'notifications/notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         stream: FirebaseFirestore.instance.collection('Cometies').where('status',isEqualTo: 'Pending').snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
+                            return const Center(child: CircularProgressIndicator());
                           } else if (snapshot.hasError) {
                             return Center(child: Text('Error: ${snapshot.error}'));
                           } else if (snapshot.hasData) {
@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               CircleAvatar(
                                                 radius: 30,
                                                 backgroundImage: snapshot.data?.docs[index]['creatorProfilePic']==''?
-                                                AssetImage('assets/images/pfavatar.png'):
+                                                const AssetImage('assets/images/pfavatar.png'):
                                                 NetworkImage(snapshot.data?.docs[index]['creatorProfilePic']),
                                               ),
                                               const SizedBox(
@@ -204,15 +204,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           context: context,
                                                           builder: (context) {
                                                             return AlertDialog(
-                                                              backgroundColor: Color(0xffE9F0FF),
+                                                              backgroundColor: const Color(0xffE9F0FF),
                                                               title: Text(
                                                                 'Join Cometie',
                                                                 style: GoogleFonts.alef(
                                                                     color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
                                                               ),
-                                                              contentPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                                                              contentPadding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
                                                               content: Text('Would you like to join this cometie?',style: GoogleFonts.alef(fontWeight: FontWeight.w400,fontSize: 15),),
-                                                              actionsPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                                                              actionsPadding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
                                                               actions: [
                                                                 TextButton(
                                                                     onPressed: (){
@@ -281,12 +281,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   );
                                 }
-                               return SizedBox();
+                               return const SizedBox();
                               },
                             );
 
                           } else {
-                            return Center(child: Text('Something went wrong!'));
+                            return const  Center(child: Text('Something went wrong!'));
                           }
                         },
                       ),
@@ -343,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           // contentPadding: const EdgeInsets.only(right: 15),
                           leading: CircleAvatar(
                             backgroundImage: snapshot.data?.docs[index]['creatorProfilePic']==''?
-                            AssetImage('assets/images/pfavatar.png'):
+                            const AssetImage('assets/images/pfavatar.png'):
                             NetworkImage(snapshot.data?.docs[index]['creatorProfilePic']),
                           ),
                           title: Text(

@@ -1,3 +1,4 @@
+
 // ignore_for_file: deprecated_member_use
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,10 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../Controller/auth_controller.dart';
-import '../Controller/state_controller.dart';
-import 'Auth/sign_up_screen.dart';
-import 'cometie_info_screen.dart';
+import '../../Controller/auth_controller.dart';
+import '../../Controller/state_controller.dart';
+import '../Auth/sign_up_screen.dart';
+import '../my_cometie_info_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -23,7 +24,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _stateController = Get.put(StateController());
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _authController.getUserData();
   }
@@ -466,7 +466,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   var cometieData = cometies[index].data() as Map<String, dynamic>;
                                   return ListTile(
                                     onTap: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>CometieInfoScreen(
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MyCometieInfoScreen(
                                         cometieId: cometieData['cometieId'],
                                       )));
                                     },
@@ -531,7 +531,7 @@ class FilterButton extends StatelessWidget {
   final String title;
   final Color txtColor;
 
-  FilterButton({
+  const FilterButton({
     super.key,
     required this.title,
     required this.txtColor,

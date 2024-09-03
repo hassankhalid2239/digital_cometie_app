@@ -15,7 +15,7 @@ class CustomFilterButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(25),
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15,vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 3),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           border: Border.all(color: borderColor),

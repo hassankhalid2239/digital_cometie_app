@@ -7,7 +7,7 @@ class StateController extends GetxController {
   RxInt getPageIndex = 0.obs;
   RxDouble currentValue = 3.0.obs;
   RxBool note = false.obs;
-  RxInt profileFilterCometie=0.obs;
+  RxInt profileFilterCometie = 0.obs;
   final Rx<PageController> pageController = PageController().obs;
   RxInt notifyFilterIndex = 0.obs;
   RxInt reportFilterIndex = 0.obs;
@@ -16,17 +16,19 @@ class StateController extends GetxController {
   RxString searchQuery = 'Search query'.obs;
 
   void updateSearchQuery(String newQuery) {
-      searchQuery.value = newQuery;
+    searchQuery.value = newQuery;
   }
+
   Rx<Country> selectedCountry = Country(
-      phoneCode: "92",
-      countryCode: "PK",
-      e164Sc: 0,
-      geographic: true,
-      level: 1,
-      name: 'Pakistan',
-      example: 'Pakistan',
-      displayName: 'Pakistan',
-      displayNameNoCountryCode: 'PK',
-      e164Key: "").obs;
+          phoneCode: "92",
+          countryCode: "PK",
+          e164Sc: 0,
+          geographic: true,
+          level: 1,
+          name: 'Pakistan',
+          example: 'Pakistan',
+          displayName: 'Pakistan',
+          displayNameNoCountryCode: 'PK',
+          e164Key: "")
+      .obs;
 }

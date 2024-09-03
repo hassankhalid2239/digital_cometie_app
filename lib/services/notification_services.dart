@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:digital_cometie_app/Views/notification_screen.dart';
+import 'package:digital_cometie_app/Views/notifications/notification_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:flutter/foundation.dart';
@@ -240,7 +240,7 @@ class NotificationServices {
 
 
 
-  Future forgroundMessage() async {
+  Future forGroundMessage() async {
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,

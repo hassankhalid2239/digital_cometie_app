@@ -2,7 +2,6 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../Controller/auth_controller.dart';
 import '../../Controller/state_controller.dart';
 import '../../Widgets/custom_elevated_button.dart';
@@ -66,11 +65,11 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 decoration: InputDecoration(
                   prefixIcon: Container(
-                    padding: EdgeInsets.all(8),
+                    padding: const  EdgeInsets.all(8),
                     child: InkWell(
                       onTap: (){
                         showCountryPicker(context: context,
-                            countryListTheme: CountryListThemeData(
+                            countryListTheme: const CountryListThemeData(
                               bottomSheetHeight: 550
                             ),
                             onSelect: (value){
@@ -88,7 +87,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   ),
                   contentPadding:
-                  EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide: const BorderSide(
@@ -112,15 +111,15 @@ class SignUpScreen extends StatelessWidget {
               height: 50,
             ),
             Obx((){
-              if(_authController.loading==true){
-                return CircularProgressIndicator(color:Color(0xff003CBE) ,);
+              if(_authController.loading.value==true){
+                return const CircularProgressIndicator(color:Color(0xff003CBE) ,);
               }else{
                 return CustomElevatedButton(
                     title: 'Sign Up',
                     onTap: () {
                       if (_phoneController.text.isNotEmpty) {
                         String phoneNumber= _phoneController.text.trim();
-                        _authController.signInWithPhone(context, "+${_stateController.selectedCountry.value.phoneCode}${phoneNumber}");
+                        _authController.signInWithPhone(context, "+${_stateController.selectedCountry.value.phoneCode}$phoneNumber");
                       } else {
                         Get.snackbar(
                           'Required',

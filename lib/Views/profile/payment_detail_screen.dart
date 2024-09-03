@@ -3,13 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
+import 'package:intl/intl.dart';
+import '../../Controller/cometie_controller.dart';
+import '../../Controller/notification_controller.dart';
+import '../../Widgets/custom_elevated_button.dart';
+import '../my_cometie_info_screen.dart';
 
-import 'cometie_info_screen.dart';
 
 class PaymentDetailScreen extends StatelessWidget {
   final String memberUid;
   final String cometieId;
-  const PaymentDetailScreen({super.key,required this.memberUid,required this.cometieId});
+  final _cometieController=Get.put(CometieController());
+  PaymentDetailScreen({super.key,required this.memberUid,required this.cometieId});
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +48,14 @@ class PaymentDetailScreen extends StatelessWidget {
         stream: FirebaseFirestore.instance.collection('Cometies').doc(cometieId).collection('Members').doc(memberUid).collection('Payments').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
             return  ListView.builder(
               shrinkWrap: true,
               itemCount: snapshot.data?.docs.length,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return Card(
                   color: const Color(0xffE9F0FF),
@@ -62,6 +68,14 @@ class PaymentDetailScreen extends StatelessWidget {
                     iconColor:Colors.black,
                     collapsedIconColor: Colors.black,
                     onExpansionChanged: (value){},
+                    leading: InstaImageViewer(
+                      child: CircleAvatar(
+                        radius: 25,
+                        backgroundImage: snapshot.data?.docs[index]['screenshot']==''?
+                        const AssetImage('assets/images/pfavatar.png'):
+                        NetworkImage(snapshot.data?.docs[index]['screenshot']),
+                      ),
+                    ),
                     title: Text(
                       snapshot.data!.docs[index].id.toString(),
                       style: GoogleFonts.roboto(
@@ -81,8 +95,43 @@ class PaymentDetailScreen extends StatelessWidget {
                     children: [
                       InfoListTile(title: 'Amount', value: snapshot.data!.docs[index]['amount'].toString()),
                       InfoListTile(title: 'Transaction Id', value: snapshot.data!.docs[index]['transactionId'].toString()),
-                      InfoListTile(title: 'Date', value: snapshot.data!.docs[index]['paymentDate'].toString()),
+                      snapshot.data!.docs[index]['screenshot']==''?
+                      InfoListTile(title: 'Date', value: 'Pending'):
+                      InfoListTile(title: 'Date', value: DateFormat('EEE, d MMM yyyy').format(snapshot.data!.docs[index]['paymentDate'].toDate())),
+                      Obx((){
+                        if(_cometieController.loading.value==true){
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: const Color(0xff003CBE),
+                                  borderRadius: BorderRadius.circular(25)
+                              ),
+                              child: const Center(
+                                child: CircularProgressIndicator(color: Colors.white,),
+                              ),
+                            ),
+                          );
+                        }else{
+                          if(snapshot.data!.docs[index]['paymentStatus']=='Unpaid'){
+                            return CustomElevatedButton(
+                              title: 'Send ${snapshot.data!.docs[index].id.toString()} Alert',
+                              onTap: () {
+                                Notifications().sendPaymentAlert(
+                                    memberUid,
+                                    snapshot.data!.docs[index].id,
+                                    cometieId);
+                              },
+                            );
+                          }else{
+                            return SizedBox();
+                          }
 
+                        }
+                      }),
+                      SizedBox(height: 8,)
                     ],
                   ),
                 );
@@ -90,7 +139,7 @@ class PaymentDetailScreen extends StatelessWidget {
             );
 
           } else {
-            return Center(child: Text('Something went wrong!'));
+            return const Center(child: Text('Something went wrong!'));
           }
         },
       ),

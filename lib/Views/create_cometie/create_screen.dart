@@ -3,11 +3,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../Controller/auth_controller.dart';
-import '../Controller/cometie_controller.dart';
-import '../Controller/state_controller.dart';
-import '../Widgets/custom_elevated_button.dart';
-import '../Widgets/custom_text_form_field.dart';
+import '../../Controller/auth_controller.dart';
+import '../../Controller/cometie_controller.dart';
+import '../../Controller/state_controller.dart';
+import '../../Widgets/custom_elevated_button.dart';
+import '../../Widgets/custom_text_form_field.dart';
 import 'add_member_screen.dart';
 
 class CreateScreen extends StatefulWidget {

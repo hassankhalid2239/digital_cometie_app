@@ -2,15 +2,15 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:digital_cometie_app/Controller/state_controller.dart';
+import 'package:digital_cometie_app/Views/my_payment_detail_screen.dart';
 import 'package:digital_cometie_app/Widgets/custom_filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../Controller/auth_controller.dart';
-import '../Controller/cometie_controller.dart';
-import '../Controller/notification_controller.dart';
-import '../services/notification_services.dart';
+import '../../Controller/auth_controller.dart';
+import '../../Controller/notification_controller.dart';
+import '../confirm_payment_screen.dart';
 import 'others_profile_screen.dart';
 
 class NotificationListScreen extends StatelessWidget {
@@ -18,12 +18,6 @@ class NotificationListScreen extends StatelessWidget {
 
   final _authController=Get.put(AuthController());
   final _stateController=Get.put(StateController());
-
-  final _cometieController=Get.put(CometieController());
-
-  final _notificationServices = NotificationServices();
-
-  final _notificationController = Get.put(Notifications());
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +31,7 @@ class NotificationListScreen extends StatelessWidget {
             child: IconButton(
               onPressed: () {
                 Get.back();
+                _stateController.notifyFilterIndex.value=0;
               },
               icon: SvgPicture.asset(
                 'assets/svg/popicon.svg',
@@ -66,55 +61,67 @@ class NotificationListScreen extends StatelessWidget {
                          _stateController.notifyFilterIndex.value=0;
                        },
                        title: 'All',
-                       bgColor: _stateController.notifyFilterIndex.value==0?Color(0xff003CBE):Colors.transparent,
+                       bgColor: _stateController.notifyFilterIndex.value==0?const Color(0xff003CBE):Colors.transparent,
                        borderColor: _stateController.notifyFilterIndex.value==0?Colors.transparent:Colors.grey,
                        textColor: _stateController.notifyFilterIndex.value==0?Colors.white:Colors.black);
                  }),
-                  SizedBox(width: 10,),
+                  const SizedBox(width: 10,),
                   Obx((){
                     return CustomFilterButton(
                         onTap: (){
                           _stateController.notifyFilterIndex.value=1;
                         },
                         title: 'Cometie Requests',
-                        bgColor: _stateController.notifyFilterIndex.value==1?Color(0xff003CBE):Colors.transparent,
+                        bgColor: _stateController.notifyFilterIndex.value==1?const Color(0xff003CBE):Colors.transparent,
                         borderColor: _stateController.notifyFilterIndex.value==1?Colors.transparent:Colors.grey,
                         textColor: _stateController.notifyFilterIndex.value==1?Colors.white:Colors.black                  );
                   }),
-                  SizedBox(width: 10,),
+                  const SizedBox(width: 10,),
                   Obx((){
                     return CustomFilterButton(
                         onTap: (){
                           _stateController.notifyFilterIndex.value=2;
                         },
                         title: 'Accepted',
-                        bgColor: _stateController.notifyFilterIndex.value==2?Color(0xff003CBE):Colors.transparent,
+                        bgColor: _stateController.notifyFilterIndex.value==2?const Color(0xff003CBE):Colors.transparent,
                         borderColor: _stateController.notifyFilterIndex.value==2?Colors.transparent:Colors.grey,
                         textColor: _stateController.notifyFilterIndex.value==2?Colors.white:Colors.black
                     );
                   }),
-                  SizedBox(width: 10,),
+                  const SizedBox(width: 10,),
                   Obx((){
                     return CustomFilterButton(
                         onTap: (){
                           _stateController.notifyFilterIndex.value=3;
                         },
                         title: 'Rejected',
-                        bgColor: _stateController.notifyFilterIndex.value==3?Color(0xff003CBE):Colors.transparent,
+                        bgColor: _stateController.notifyFilterIndex.value==3?const Color(0xff003CBE):Colors.transparent,
                         borderColor: _stateController.notifyFilterIndex.value==3?Colors.transparent:Colors.grey,
                         textColor: _stateController.notifyFilterIndex.value==3?Colors.white:Colors.black
                     );
                   }),
-                  SizedBox(width: 10,),
+                  const SizedBox(width: 10,),
                   Obx((){
                     return CustomFilterButton(
                         onTap: (){
                           _stateController.notifyFilterIndex.value=4;
                         },
                         title: 'Joined You',
-                        bgColor: _stateController.notifyFilterIndex.value==4?Color(0xff003CBE):Colors.transparent,
+                        bgColor: _stateController.notifyFilterIndex.value==4?const Color(0xff003CBE):Colors.transparent,
                         borderColor: _stateController.notifyFilterIndex.value==4?Colors.transparent:Colors.grey,
                         textColor: _stateController.notifyFilterIndex.value==4?Colors.white:Colors.black
+                    );
+                  }),
+                  const SizedBox(width: 10,),
+                  Obx((){
+                    return CustomFilterButton(
+                        onTap: (){
+                          _stateController.notifyFilterIndex.value=5;
+                        },
+                        title: 'Payments',
+                        bgColor: _stateController.notifyFilterIndex.value==5?const Color(0xff003CBE):Colors.transparent,
+                        borderColor: _stateController.notifyFilterIndex.value==5?Colors.transparent:Colors.grey,
+                        textColor: _stateController.notifyFilterIndex.value==5?Colors.white:Colors.black
                     );
                   }),
                 ],
@@ -128,11 +135,11 @@ class NotificationListScreen extends StatelessWidget {
           stream: Notifications().getNotifications(),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator(),);
+              return const Center(child: CircularProgressIndicator(),);
             } else if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.data?.docs.isNotEmpty == true) {
                 return ListView.builder(
-                  padding: EdgeInsets.symmetric(vertical: 5),
+                  padding: const EdgeInsets.symmetric(vertical: 5),
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
                     return Dismissible(
@@ -148,7 +155,7 @@ class NotificationListScreen extends StatelessWidget {
                             .delete();
                       },
                       child: ListTile(
-                        tileColor: Color(0xffE9F0FF),
+                        tileColor: const Color(0xffE9F0FF),
                         onTap: () async {
                           DocumentSnapshot uDoc = await FirebaseFirestore.instance
                               .collection('Users')
@@ -171,6 +178,30 @@ class NotificationListScreen extends StatelessWidget {
                                           cometieIid: snapshot.data?.docs[index]['cometeId'],
                                           cometieName: snap['cometieName'],
                                           response: snapshot.data?.docs[index]['response'],
+                                        )));
+                          }else if(snapshot.data?.docs[index]['type']=='paymentAlert'){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MyPaymentDetailScreen(
+                                          memberUid: _authController.userModel.uid, cometieId: uDoc['cometeId'],
+                                        )));
+                          } else if(snapshot.data?.docs[index]['type']=='paymentConfirm') {
+                            DocumentSnapshot userDoc = await FirebaseFirestore.instance
+                                .collection('Users')
+                                .doc(snapshot.data!.docs[index]['senderId'])
+                                .get();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ConfirmPaymentScreen(
+                                          cometieId: uDoc['cometeId'],
+                                          notificationId: snapshot.data!.docs[index]['notificationId'],
+                                          receiverId:snapshot.data!.docs[index]['senderId'],
+                                          paymentIndex: snapshot.data!.docs[index]['payment'],
+                                          receiverName: userDoc['name'] ,
                                         )));
                           }else{
                             return;

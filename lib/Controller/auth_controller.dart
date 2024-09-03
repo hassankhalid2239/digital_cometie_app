@@ -10,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import '../Modals/user_model.dart';
 import '../Views/Auth/otp_screen.dart';
 import '../services/notification_services.dart';
-import 'notification_controller.dart';
 
 class AuthController extends GetxController {
   RxBool loading = false.obs;
@@ -19,8 +18,8 @@ class AuthController extends GetxController {
   final _notificationServices = NotificationServices();
   String? _uid;
   String get uid => _uid!;
-  RxString imageUrl=''.obs;
-  RxString imgUrl=''.obs;
+  RxString imageUrl = ''.obs;
+  RxString imgUrl = ''.obs;
   Rx<File?> imageFile = Rx<File?>(null);
   final Rx<UserModel> _userModel = UserModel(
           name: '',
@@ -32,8 +31,6 @@ class AuthController extends GetxController {
           createdAt: '')
       .obs;
   UserModel get userModel => _userModel.value;
-
-
 
   void signInWithPhone(BuildContext context, String phoneNumber) async {
     try {
@@ -85,6 +82,7 @@ class AuthController extends GetxController {
       loading.value = false;
     }
   }
+
   void verifyOtp({
     required BuildContext context,
     required String verificationId,
@@ -117,12 +115,16 @@ class AuthController extends GetxController {
       loading.value = false;
     }
   }
+
   Future<bool> checkExitingUser() async {
     DocumentSnapshot snapshot =
         await _firestore.collection('Users').doc(_uid).get();
     if (snapshot.exists) {
-      _notificationServices.getDeviceToken().then((token)async{
-        await FirebaseFirestore.instance.collection('UserToken').doc(FirebaseAuth.instance.currentUser!.uid).update({
+      _notificationServices.getDeviceToken().then((token) async {
+        await FirebaseFirestore.instance
+            .collection('UserToken')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({
           'token': token,
         });
       });
@@ -131,6 +133,7 @@ class AuthController extends GetxController {
       return false;
     }
   }
+
   void storeUserData(
       {required BuildContext context,
       required UserModel userModel,
@@ -151,11 +154,12 @@ class AuthController extends GetxController {
         onSuccess();
         loading.value = false;
       });
-      _notificationServices.getDeviceToken().then((token)async{
-        await FirebaseFirestore.instance.collection('UserToken').doc(FirebaseAuth.instance.currentUser!.uid).set({
-          'token': token,
-          'id' : FirebaseAuth.instance.currentUser!.uid
-        });
+      _notificationServices.getDeviceToken().then((token) async {
+        await FirebaseFirestore.instance
+            .collection('UserToken')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set(
+                {'token': token, 'id': FirebaseAuth.instance.currentUser!.uid});
       });
     } on FirebaseAuthException catch (e) {
       Get.snackbar(
@@ -173,6 +177,7 @@ class AuthController extends GetxController {
       loading.value = false;
     }
   }
+
   Future getUserData() async {
     await _firestore
         .collection('Users')
@@ -190,6 +195,7 @@ class AuthController extends GetxController {
       _uid = _userModel.value.uid;
     });
   }
+
   Future<String?> getUserToken(String documentId) async {
     try {
       // Firestore collection reference
@@ -210,9 +216,11 @@ class AuthController extends GetxController {
       return null;
     }
   }
+
   Future userSignOut() async {
     await _auth.signOut();
   }
+
   Future pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -233,6 +241,7 @@ class AuthController extends GetxController {
       );
     }
   }
+
   Future pickImageCamera() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
@@ -253,21 +262,23 @@ class AuthController extends GetxController {
       );
     }
   }
+
   Future cropImage(filePath) async {
     CroppedFile? croppedImage = await ImageCropper()
         .cropImage(sourcePath: filePath, maxHeight: 1080, maxWidth: 1080);
     if (croppedImage == null) {
-      imageFile.value=null;
+      imageFile.value = null;
     }
     if (croppedImage != null) {
-      imageFile.value=File(croppedImage.path);
+      imageFile.value = File(croppedImage.path);
       uploadProfileData();
       print('Updatedddddddddddd');
     }
   }
+
   Future uploadProfileData() async {
     try {
-      loading.value=true;
+      loading.value = true;
       final User? user = _auth.currentUser;
       final uid = user!.uid;
       final ref = FirebaseStorage.instance
@@ -281,7 +292,7 @@ class AuthController extends GetxController {
           'profilePic': imageUrl.value,
         });
         Future.delayed(const Duration(seconds: 1)).then((value) {
-          loading.value=false;
+          loading.value = false;
           Get.snackbar(
             'Congrats',
             "Changes saved successfully",
@@ -293,11 +304,10 @@ class AuthController extends GetxController {
             ),
             colorText: Colors.pinkAccent,
           );
-
         });
       }
     } on FirebaseAuthException catch (e) {
-      loading.value=false;
+      loading.value = false;
       if (e.message ==
           'A network error (such as timeout, interrupted connection or unreachable host) has occurred.') {
         Get.snackbar(
@@ -327,8 +337,8 @@ class AuthController extends GetxController {
         );
       }
     }
-
   }
+
   void deletePF() {
     final User? user = _auth.currentUser;
     final uid = user!.uid;
@@ -348,7 +358,7 @@ class AuthController extends GetxController {
         ),
         colorText: Colors.pinkAccent,
       );
-    }on FirebaseAuthException catch(e){
+    } on FirebaseAuthException catch (e) {
       Get.snackbar(
         'Oh!',
         e.toString(),
@@ -363,11 +373,4 @@ class AuthController extends GetxController {
       );
     }
   }
-
-
-
-
-
 }
-
-

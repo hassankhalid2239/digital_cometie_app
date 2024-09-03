@@ -67,8 +67,8 @@ class OtpScreen extends StatelessWidget {
               height: 50,
             ),
             Obx((){
-              if(_authController.loading==true){
-                return CircularProgressIndicator(color:Color(0xff003CBE) ,);
+              if(_authController.loading.value==true){
+                return const CircularProgressIndicator(color:Color(0xff003CBE) ,);
               }else{
                 return CustomElevatedButton(
                     title: 'Verify',

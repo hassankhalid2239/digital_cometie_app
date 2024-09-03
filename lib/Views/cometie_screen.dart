@@ -3,13 +3,8 @@ import 'package:digital_cometie_app/Controller/state_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../Controller/notification_controller.dart';
 import '../Widgets/custom_elevated_button.dart';
-import 'cometie_info_screen.dart';
 import 'others_cometie_info_screen.dart';
 
 
@@ -54,7 +49,7 @@ class CometieScreen extends StatelessWidget {
                             bgColor: const Color(0xffE9F0FF),
                             titleColor: Colors.black,
                             borderColor: _stateController.cometieFilterIndex.value==0?
-                            Color(0xff003CBE):Colors.transparent
+                            const Color(0xff003CBE):Colors.transparent
                         );
                       }),
                       const SizedBox(
@@ -69,7 +64,7 @@ class CometieScreen extends StatelessWidget {
                             bgColor: const Color(0xffE9F0FF),
                             titleColor: Colors.black,
                             borderColor: _stateController.cometieFilterIndex.value==1?
-                            Color(0xff003CBE):Colors.transparent
+                            const Color(0xff003CBE):Colors.transparent
                         );
                       }),
                       const SizedBox(
@@ -84,7 +79,7 @@ class CometieScreen extends StatelessWidget {
                             bgColor: const Color(0xffE9F0FF),
                             titleColor: Colors.black,
                             borderColor: _stateController.cometieFilterIndex.value==2?
-                            Color(0xff003CBE):Colors.transparent
+                            const Color(0xff003CBE):Colors.transparent
                         );
                       })
 
@@ -107,7 +102,7 @@ class CometieScreen extends StatelessWidget {
                         stream: CometieController().getCometies(),
                         builder: (context, AsyncSnapshot snapshot) {
                           if (snapshot.connectionState == ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator(),);
+                            return const Center(child: CircularProgressIndicator(),);
                           } else if (snapshot.connectionState == ConnectionState.active) {
                             if (snapshot.data?.docs.isNotEmpty == true) {
                               return ListView.separated(
@@ -125,7 +120,7 @@ class CometieScreen extends StatelessWidget {
                                     leading: CircleAvatar(
                                       radius: 40,
                                       backgroundImage: snapshot.data?.docs[index]['creatorProfilePic']==''?
-                                      AssetImage('assets/images/pfavatar.png'):
+                                      const AssetImage('assets/images/pfavatar.png'):
                                       NetworkImage(snapshot.data?.docs[index]['creatorProfilePic']),
                                     ),
                                     title: Text(
@@ -152,7 +147,7 @@ class CometieScreen extends StatelessWidget {
                                             letterSpacing: 2,
                                               fontWeight: FontWeight.w400,
                                               color: snapshot.data?.docs[index]['status']=='Completed'?
-                                              Color(0xff003CBE):Colors.green
+                                              const Color(0xff003CBE):Colors.green
                                           ),
                                         ),
                                       ],

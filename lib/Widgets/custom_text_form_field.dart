@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -11,7 +9,7 @@ class CustomTextFormField extends StatelessWidget {
   final double hintSize;
   final TextInputType textType;
 
-  CustomTextFormField(
+  const CustomTextFormField(
       {super.key,
       required this.controller,
       this.hintSize = 25,

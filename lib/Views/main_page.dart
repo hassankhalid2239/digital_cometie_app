@@ -1,4 +1,4 @@
-import 'package:digital_cometie_app/Views/profile_screen.dart';
+import 'package:digital_cometie_app/Views/profile/profile_screen.dart';
 import 'package:digital_cometie_app/Views/report_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../Controller/state_controller.dart';
 import 'cometie_screen.dart';
-import 'create_screen.dart';
+import 'create_cometie/create_screen.dart';
 import 'home_screen.dart';
 
 class MainPage extends StatelessWidget {
@@ -32,7 +32,7 @@ class MainPage extends StatelessWidget {
             CometieScreen(),
             const SizedBox(),
             ReportScreen(),
-            ProfileScreen(),
+            const ProfileScreen(),
           ],
         );
       }),
@@ -125,7 +125,7 @@ class MainPage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CreateScreen()));
+                            builder: (context) => const CreateScreen()));
                   },
                   child: SvgPicture.asset(
                     'assets/svg/add.svg',

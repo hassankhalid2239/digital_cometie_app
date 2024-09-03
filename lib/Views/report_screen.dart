@@ -1,17 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:digital_cometie_app/Controller/cometie_controller.dart';
-import 'package:digital_cometie_app/Controller/state_controller.dart';
+import 'package:digital_cometie_app/Views/report_cometie_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-
 import 'package:google_fonts/google_fonts.dart';
 import '../Widgets/custom_text_form_field.dart';
 
 
 class ReportScreen extends StatelessWidget {
   ReportScreen({super.key});
-  final _stateController = Get.put(StateController());
   final TextEditingController _dateController = TextEditingController();
 
   @override
@@ -115,10 +112,10 @@ class ReportScreen extends StatelessWidget {
                 stream: CometieController().getCometiesReport(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('No cometies found.'));
+                    return const Center(child: Text('No cometies found.'));
                   }
                   var cometies = snapshot.data!;
                   return Card(
@@ -129,7 +126,7 @@ class ReportScreen extends StatelessWidget {
                     shadowColor: const Color(0xff003CBE),
                     child: ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: cometies.length,
                       itemBuilder: (context, index) {
                         var cometie = cometies[index].data();
@@ -140,7 +137,7 @@ class ReportScreen extends StatelessWidget {
                           leading: CircleAvatar(
                             radius: 40,
                             backgroundImage: cometie?['creatorProfilePic']==''?
-                            AssetImage('assets/images/pfavatar.png'):
+                            const AssetImage('assets/images/pfavatar.png'):
                             NetworkImage(cometie?['creatorProfilePic']),
                           ),
                           title: Text(
@@ -167,7 +164,7 @@ class ReportScreen extends StatelessWidget {
                                     letterSpacing: 2,
                                     fontWeight: FontWeight.w400,
                                     color: cometie?['status']=='Completed'?
-                                    Color(0xff003CBE):
+                                    const Color(0xff003CBE):
                                     cometie?['status']=='Pending'?
                                     Colors.redAccent:Colors.green
                                 ),
@@ -176,10 +173,12 @@ class ReportScreen extends StatelessWidget {
                           ),
                           trailing: IconButton(
                             onPressed: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => const CometieInfoScreen()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ReportCometieInfoScreen(
+                                        cometieId: cometie?['cometieId'],
+                                      )));
                             },
                             icon: SvgPicture.asset('assets/svg/info.svg'),
                           ),

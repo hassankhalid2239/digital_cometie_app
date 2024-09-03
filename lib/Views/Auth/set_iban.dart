@@ -69,8 +69,8 @@ class SetIban extends StatelessWidget {
           ),
         ),
         floatingActionButton: Obx((){
-          if(_authController.loading==true){
-            return CircularProgressIndicator(color:Color(0xff003CBE) ,);
+          if(_authController.loading.value==true){
+            return const CircularProgressIndicator(color:Color(0xff003CBE) ,);
           }else{
              return CustomFab(
                onTap: () {

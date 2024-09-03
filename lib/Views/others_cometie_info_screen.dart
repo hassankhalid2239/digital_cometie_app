@@ -1,17 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:digital_cometie_app/Views/payment_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-import '../Controller/cometie_controller.dart';
 
 class OthersCometieInfoScreen extends StatelessWidget {
   final String cometieId;
-  final _cometieController = Get.put(CometieController());
-  OthersCometieInfoScreen({super.key,required this.cometieId});
+  const OthersCometieInfoScreen({super.key,required this.cometieId});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +53,7 @@ class OthersCometieInfoScreen extends StatelessWidget {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
@@ -71,14 +68,14 @@ class OthersCometieInfoScreen extends StatelessWidget {
                             InfoListTile(title: 'Created At',value: DateFormat('EEE, d MMM yyyy').format(snapshot.data!['createdAt'].toDate()),),
                             InfoListTile(title: 'Launched At',value:  DateFormat('EEE, d MMM yyyy').format(snapshot.data!['launchedAt'].toDate()),),
                             DateFormat('EEE, d MMM yyyy').format(snapshot.data!['completedAt'].toDate())==DateFormat('EEE, d MMM yyyy').format(snapshot.data!['createdAt'].toDate())?
-                            InfoListTile(title: 'Due Date',value:  'Pending',):
+                            const InfoListTile(title: 'Due Date',value:  'Pending',):
                             InfoListTile(title: 'Due Date',value:  DateFormat('EEE, d MMM yyyy').format(snapshot.data!['completedAt'].toDate()),),
                           ],
                         ),
                       );
 
                     } else {
-                      return Center(child: Text('Something went wrong!'));
+                      return const Center(child: Text('Something went wrong!'));
                     }
                   },
                 ),

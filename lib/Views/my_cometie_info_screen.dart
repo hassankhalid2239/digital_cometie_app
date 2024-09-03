@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:digital_cometie_app/Views/payment_detail_screen.dart';
+import 'package:digital_cometie_app/Controller/auth_controller.dart';
+import 'package:digital_cometie_app/Views/my_payment_detail_screen.dart';
+import 'package:digital_cometie_app/Views/profile/payment_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -7,11 +9,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../Controller/cometie_controller.dart';
+import '../Widgets/custom_elevated_button.dart';
 
-class CometieInfoScreen extends StatelessWidget {
+
+class MyCometieInfoScreen extends StatelessWidget {
   final String cometieId;
-  final _cometieController = Get.put(CometieController());
-  CometieInfoScreen({super.key,required this.cometieId});
+  final _authController=Get.put(AuthController());
+  final _cometieController=Get.put(CometieController());
+  MyCometieInfoScreen({super.key,required this.cometieId});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +61,7 @@ class CometieInfoScreen extends StatelessWidget {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (snapshot.hasData) {
@@ -71,19 +76,19 @@ class CometieInfoScreen extends StatelessWidget {
                           InfoListTile(title: 'Created At',value: DateFormat('EEE, d MMM yyyy').format(snapshot.data!['createdAt'].toDate()),),
                           InfoListTile(title: 'Launched At',value:  DateFormat('EEE, d MMM yyyy').format(snapshot.data!['launchedAt'].toDate()),),
                           DateFormat('EEE, d MMM yyyy').format(snapshot.data!['completedAt'].toDate())==DateFormat('EEE, d MMM yyyy').format(snapshot.data!['createdAt'].toDate())?
-                          InfoListTile(title: 'Due Date',value:  'Pending',):
+                          const InfoListTile(title: 'Due Date',value:  'Pending',):
                           InfoListTile(title: 'Due Date',value:  DateFormat('EEE, d MMM yyyy').format(snapshot.data!['completedAt'].toDate()),),
                         ],
                       ),
                     );
         
                   } else {
-                    return Center(child: Text('Something went wrong!'));
+                    return const Center(child: Text('Something went wrong!'));
                   }
                 },
               ),
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text('Members',style:GoogleFonts.roboto(
@@ -101,28 +106,36 @@ class CometieInfoScreen extends StatelessWidget {
                 stream: FirebaseFirestore.instance.collection('Cometies').doc(cometieId).collection('Members').snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (snapshot.hasData) {
                     return  ListView.builder(
                       shrinkWrap: true,
                       itemCount: snapshot.data?.docs.length,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return ListTile(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentDetailScreen(
+                            if(snapshot.data?.docs[index]['memberUid']!=_authController.userModel.uid){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentDetailScreen(
                                 memberUid: snapshot.data?.docs[index]['memberUid'],
-                              cometieId: cometieId,
-                            )
-                            ));
+                                cometieId: cometieId,
+                              )
+                              ));
+                            }else{
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>MyPaymentDetailScreen(
+                                memberUid: snapshot.data?.docs[index]['memberUid'],
+                                cometieId: cometieId,
+                              )
+                              ));
+                            }
                           },
                           contentPadding: const EdgeInsets.only(right: 15),
                           leading: CircleAvatar(
                             radius: 40,
                             backgroundImage: snapshot.data?.docs[index]['memberProfilePic']==''?
-                            AssetImage('assets/images/pfavatar.png'):
+                            const AssetImage('assets/images/pfavatar.png'):
                             NetworkImage(snapshot.data?.docs[index]['memberProfilePic']),
                           ),
                           title: Text(
@@ -139,20 +152,20 @@ class CometieInfoScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                                 color: Colors.black),
                           ),
-                          trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,),
+                          trailing: const Icon(Icons.arrow_forward_ios,color: Colors.black,),
                         );
                       },
                     );
 
                   } else {
-                    return Center(child: Text('Something went wrong!'));
+                    return const Center(child: Text('Something went wrong!'));
                   }
                 },
               )
             )
           ],
         ),
-      )
+      ),
     );
   }
 }

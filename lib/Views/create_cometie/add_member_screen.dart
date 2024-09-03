@@ -5,10 +5,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../Controller/cometie_controller.dart';
-import '../Controller/state_controller.dart';
-import '../Widgets/custom_elevated_button.dart';
-import 'main_page.dart';
+import '../../Controller/cometie_controller.dart';
+import '../../Controller/state_controller.dart';
+import '../../Widgets/custom_elevated_button.dart';
+import '../main_page.dart';
 
 class AddMemberScreen extends StatefulWidget {
   final String name;
@@ -98,7 +98,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             child: CircleAvatar(
                           radius: 25,
                         backgroundImage: _cometieController.members[index]['memberProfilePic']==''?
-                        AssetImage('assets/images/pfavatar.png'):
+                        const AssetImage('assets/images/pfavatar.png'):
                         NetworkImage(_cometieController.members[index]['memberProfilePic']),
                       ),),
                           Align(
@@ -169,7 +169,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                     ),
                   ),
                   contentPadding:
-                  EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide: const BorderSide(
@@ -194,7 +194,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                     .snapshots(),
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: const CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.connectionState == ConnectionState.active) {
                     if (snapshot.data.docs.isNotEmpty == true) {
                       return  Expanded(
@@ -228,7 +228,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                               leading: CircleAvatar(
                                 radius: 40,
                                 backgroundImage: snapshot.data.docs[index]['profilePic']==''?
-                                AssetImage('assets/images/pfavatar.png'):
+                                const AssetImage('assets/images/pfavatar.png'):
                                 NetworkImage(snapshot.data.docs[index]['profilePic']),
                               ),
                               title: Text(
@@ -277,10 +277,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
             return Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: Color(0xff003CBE),
+                  color: const Color(0xff003CBE),
                   borderRadius: BorderRadius.circular(25)
               ),
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(color: Colors.white,),
               ),
             );

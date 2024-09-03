@@ -56,6 +56,8 @@ dependencies:
   intl:
   flutter_animate:
   rxdart:
+  dotted_border:
+  insta_image_viewer:
 dev_dependencies:
   flutter_test:
     sdk: flutter
