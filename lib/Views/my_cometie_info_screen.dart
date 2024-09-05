@@ -116,7 +116,9 @@ class MyCometieInfoScreen extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return ListTile(
-                          onTap: () {
+                          onTap: () async {
+                            var snap= await FirebaseFirestore.instance.collection('Cometies').doc(cometieId).get();
+                            var data= snap.data()!;
                             if(snapshot.data?.docs[index]['memberUid']!=_authController.userModel.uid){
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentDetailScreen(
                                 memberUid: snapshot.data?.docs[index]['memberUid'],
@@ -126,6 +128,7 @@ class MyCometieInfoScreen extends StatelessWidget {
                             }else{
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>MyPaymentDetailScreen(
                                 memberUid: snapshot.data?.docs[index]['memberUid'],
+                                creatorId: data['uid'],
                                 cometieId: cometieId,
                               )
                               ));

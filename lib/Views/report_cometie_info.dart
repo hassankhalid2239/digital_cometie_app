@@ -117,8 +117,13 @@ class ReportCometieInfoScreen extends StatelessWidget {
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return ListTile(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyPaymentDetailScreen(memberUid: _authController.userModel.uid, cometieId: cometieId)));
+                                onTap: ()async{
+                                  var snap= await FirebaseFirestore.instance.collection('Cometies').doc(cometieId).get();
+                                  var data= snap.data()!;
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyPaymentDetailScreen(
+                                      memberUid: _authController.userModel.uid,
+                                      creatorId: data['uid'],
+                                      cometieId: cometieId)));
                                 },
                                 title: Text(
                                   snapshot.data!.docs[index].id.toString(),

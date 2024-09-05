@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:digital_cometie_app/Views/notifications/notification_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:googleapis_auth/auth_io.dart';
@@ -13,6 +14,7 @@ class NotificationServices {
 
   //initialising firebase message plugin
   FirebaseMessaging messaging = FirebaseMessaging.instance ;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   //initialising firebase message plugin
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin  = FlutterLocalNotificationsPlugin();
@@ -81,7 +83,6 @@ class NotificationServices {
   }
 
   void firebaseInit(BuildContext context){
-
     FirebaseMessaging.onMessage.listen((message) {
 
       RemoteNotification? notification = message.notification ;
@@ -179,6 +180,7 @@ class NotificationServices {
 
 
   Future<void> sendNotificationToUsers(String title, String body, List<String> tokens) async {
+
 
     const String fcmUrl = 'https://fcm.googleapis.com/v1/projects/digital-cometie-app-c7294/messages:send';
 

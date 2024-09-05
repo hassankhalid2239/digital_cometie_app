@@ -14,7 +14,9 @@ import 'my_cometie_info_screen.dart';
 class MyPaymentDetailScreen extends StatelessWidget {
   final String memberUid;
   final String cometieId;
-   MyPaymentDetailScreen({super.key,required this.memberUid,required this.cometieId});
+  final String creatorId;
+
+   MyPaymentDetailScreen({super.key,required this.memberUid,required this.cometieId, required this.creatorId});
   final _authController= Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
@@ -87,7 +89,7 @@ class MyPaymentDetailScreen extends StatelessWidget {
                               Colors.redAccent:Colors.green
                           ),
                         ),
-                        trailing: memberUid != _authController.userModel.uid?
+                        trailing: creatorId != _authController.userModel.uid?
                         snapshot.data!.docs[index]['enable']==true?
                         IconButton(
                           onPressed: (){

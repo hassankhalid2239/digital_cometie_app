@@ -185,6 +185,7 @@ class NotificationListScreen extends StatelessWidget {
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         MyPaymentDetailScreen(
+                                          creatorId: snap['uid'],
                                           memberUid: _authController.userModel.uid, cometieId: uDoc['cometeId'],
                                         )));
                           } else if(snapshot.data?.docs[index]['type']=='paymentConfirm') {
