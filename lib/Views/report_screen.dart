@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:digital_cometie_app/Controller/auth_controller.dart';
 import 'package:digital_cometie_app/Controller/cometie_controller.dart';
 import 'package:digital_cometie_app/Views/report_cometie_info.dart';
+import 'package:digital_cometie_app/Widgets/image_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../Widgets/custom_text_form_field.dart';
 
@@ -10,7 +14,7 @@ import '../Widgets/custom_text_form_field.dart';
 class ReportScreen extends StatelessWidget {
   ReportScreen({super.key});
   final TextEditingController _dateController = TextEditingController();
-
+  final _authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,86 +112,101 @@ class ReportScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              StreamBuilder<List<DocumentSnapshot<Map<String, dynamic>>>>(
-                stream: CometieController().getCometiesReport(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('Users').doc(_authController.userModel.uid).collection('JoinedCometies').snapshots(),
+                builder: (context, snap) {
+                  if (!snap.hasData) {
+                    return Center(child: CircularProgressIndicator());
                   }
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('No cometies found.'));
-                  }
-                  var cometies = snapshot.data!;
-                  return Card(
-                    color: const Color(0xffE9F0FF),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    elevation: 30,
-                    shadowColor: const Color(0xff003CBE),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: cometies.length,
-                      itemBuilder: (context, index) {
-                        var cometie = cometies[index].data();
-                        // Display cometie data here
-                        return ListTile(
-                          tileColor: const Color(0xffE9F0FF),
-                          contentPadding: const EdgeInsets.only(right: 15),
-                          leading: CircleAvatar(
-                            radius: 40,
-                            backgroundImage: cometie?['creatorProfilePic']==''?
-                            const AssetImage('assets/images/pfavatar.png'):
-                            NetworkImage(cometie?['creatorProfilePic']),
-                          ),
-                          title: Text(
-                            cometie?['cometieName'],
-                            style: GoogleFonts.roboto(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Amount: ${cometie?['eachAmount']}',
-                                style: GoogleFonts.roboto(
-                                  // fontSize: 18,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black),
-                              ),
-                              Text(
-                                '${cometie?['status']}',
-                                style: GoogleFonts.roboto(
-                                  // fontSize: 20,
-                                    letterSpacing: 2,
-                                    fontWeight: FontWeight.w400,
-                                    color: cometie?['status']=='Completed'?
-                                    const Color(0xff003CBE):
-                                    cometie?['status']=='Pending'?
-                                    Colors.redAccent:Colors.green
-                                ),
-                              ),
-                            ],
-                          ),
-                          trailing: IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ReportCometieInfoScreen(
-                                        cometieId: cometie?['cometieId'],
-                                      )));
-                            },
-                            icon: SvgPicture.asset('assets/svg/info.svg'),
-                          ),
-                        );
-                      },
-                    ),
+                  return ListView.builder(
+                    itemCount: snap.data?.docs.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, i) {
+                      return StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection('Cometies').snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return ListTile(
+                              title: Text('Loading...'),
+                            );
+                          }
+                          return Card(
+                            color: const Color(0xffE9F0FF),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            elevation: 30,
+                            shadowColor: const Color(0xff003CBE),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: snapshot.data?.docs.length,
+                              itemBuilder: (context, index) {
+                                if(snap.data?.docs[i]['cometieId']==snapshot.data?.docs[index]['cometieId']){
+                                  return ListTile(
+                                    tileColor: const Color(0xffE9F0FF),
+                                    contentPadding: const EdgeInsets.only(right: 15),
+                                    leading: CircleAvatar(
+                                      radius: 40,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(40),
+                                        child: ImageBuilder(image: snapshot.data?.docs[index]['creatorProfilePic']),
+                                      ),
+                                    ),
+                                    title: Text(
+                                      snapshot.data?.docs[index]['cometieName'],
+                                      style: GoogleFonts.roboto(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black),
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Amount: ${snapshot.data?.docs[index]['eachAmount']}',
+                                          style: GoogleFonts.roboto(
+                                            // fontSize: 18,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black),
+                                        ),
+                                        Text(
+                                          '${snapshot.data?.docs[index]['status']}',
+                                          style: GoogleFonts.roboto(
+                                            // fontSize: 20,
+                                              letterSpacing: 2,
+                                              fontWeight: FontWeight.w400,
+                                              color: snapshot.data?.docs[index]['status']=='Completed'?
+                                              const Color(0xff003CBE):
+                                              snapshot.data?.docs[index]['status']=='Pending'?
+                                              Colors.redAccent:Colors.green
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    trailing: IconButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ReportCometieInfoScreen(
+                                                  cometieId: snapshot.data?.docs[index]['cometieId'],
+                                                )));
+                                      },
+                                      icon: SvgPicture.asset('assets/svg/info.svg'),
+                                    ),
+                                  );
+                                }
+                                return SizedBox();
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
                   );
                 },
-              )
+              ),
 
             ],
           ),

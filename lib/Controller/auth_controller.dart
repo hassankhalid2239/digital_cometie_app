@@ -178,7 +178,7 @@ class AuthController extends GetxController {
     }
   }
 
-  Future getUserData() async {
+  getUserData() async {
     await _firestore
         .collection('Users')
         .doc(_auth.currentUser!.uid)

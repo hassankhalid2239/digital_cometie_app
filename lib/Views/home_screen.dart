@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:digital_cometie_app/Controller/notification_controller.dart';
+import 'package:digital_cometie_app/Widgets/image_builder.dart';
 import 'package:digital_cometie_app/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,11 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             radius: 40,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(40),
-                              child: _authController.userModel.profilePic != ''
-                                  ? Image.network(_authController.userModel.profilePic,
-                                  fit: BoxFit.cover)
-                                  : Image.asset('assets/images/pfavatar.png', fit: BoxFit.cover),
-                            ));
+                              child: ImageBuilder(
+                                image: _authController.userModel.profilePic,
+                              ),
+                            )
+                        );
                       }),
                       title: Obx((){
                         return Text(
@@ -149,10 +150,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               CircleAvatar(
-                                                radius: 30,
-                                                backgroundImage: snapshot.data?.docs[index]['creatorProfilePic']==''?
-                                                const AssetImage('assets/images/pfavatar.png'):
-                                                NetworkImage(snapshot.data?.docs[index]['creatorProfilePic']),
+                                                  radius: 30,
+                                                  child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(30),
+                                                    child: ImageBuilder(
+                                                      image: snapshot.data?.docs[index]['creatorProfilePic'],
+                                                    ),
+                                                  )
                                               ),
                                               const SizedBox(
                                                 height: 5,

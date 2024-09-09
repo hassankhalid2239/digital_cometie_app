@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Controller/notification_controller.dart';
+import '../../Widgets/image_builder.dart';
 
 
 
@@ -87,11 +88,11 @@ class _OthersProfileScreenState extends State<OthersProfileScreen> {
                         radius: 40,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(40),
-                          child: snapshot.data?['profilePic'] != ''
-                              ? Image.network(snapshot.data?['profilePic'],
-                              fit: BoxFit.cover)
-                              : Image.asset('assets/images/pfavatar.png', fit: BoxFit.cover),
-                        )),
+                          child: ImageBuilder(
+                            image: snapshot.data?['profilePic'],
+                          )
+                        )
+          ),
                     const SizedBox(
                       height: 15,
                     ),

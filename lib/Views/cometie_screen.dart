@@ -1,5 +1,6 @@
 import 'package:digital_cometie_app/Controller/cometie_controller.dart';
 import 'package:digital_cometie_app/Controller/state_controller.dart';
+import 'package:digital_cometie_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -33,7 +34,8 @@ class CometieScreen extends StatelessWidget {
         backgroundColor: const Color(0xffE9F0FF),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: context.w*0.026, vertical: context.h*0.0123),
+            // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
               children: [
                 SingleChildScrollView(

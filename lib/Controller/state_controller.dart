@@ -12,6 +12,7 @@ class StateController extends GetxController {
   RxInt notifyFilterIndex = 0.obs;
   RxInt reportFilterIndex = 0.obs;
   RxInt cometieFilterIndex = 0.obs;
+  RxInt viewAllFilterIndex = 0.obs;
 
   RxString searchQuery = 'Search query'.obs;
 

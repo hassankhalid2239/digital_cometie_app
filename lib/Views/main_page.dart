@@ -1,17 +1,27 @@
 import 'package:digital_cometie_app/Views/profile/profile_screen.dart';
 import 'package:digital_cometie_app/Views/report_screen.dart';
+import 'package:digital_cometie_app/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import '../Controller/auth_controller.dart';
 import '../Controller/state_controller.dart';
 import 'cometie_screen.dart';
 import 'create_cometie/create_screen.dart';
 import 'home_screen.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
   final _stateController = Get.put(StateController());
+  final _authController = Get.put(AuthController());
+
   whenPageChanges(int pageIndex) {
     _stateController.getPageIndex.value = pageIndex;
   }
@@ -21,6 +31,12 @@ class MainPage extends StatelessWidget {
         duration: const Duration(seconds: 1), curve: Curves.ease);
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _authController.getUserData();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,11 +56,14 @@ class MainPage extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         children: [
           Container(
+              // height: context.h*0.099,
               height: 80,
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10)),
+                      topLeft: Radius.circular(context.r(0.0261)),
+                      // topLeft: Radius.circular(10),
+                      topRight: Radius.circular(context.r(0.0261))),
+                      // topRight: Radius.circular(10)),
                   color: Color(0xff003CBE),
                   image: DecorationImage(
                       image: AssetImage('assets/images/btm.png'),
@@ -61,7 +80,9 @@ class MainPage extends StatelessWidget {
               activeColor: const Color(0xff386BF6),
               border: Border.all(width: 0, color: Colors.transparent),
               inactiveColor: Colors.grey,
-              iconSize: 25,
+              iconSize: context.r(0.066),
+              // iconSize: 25,
+              // height: context.h*0.062,
               height: 50,
               items: [
                 BottomNavigationBarItem(
@@ -81,6 +102,7 @@ class MainPage extends StatelessWidget {
                   ),
                   activeIcon: SvgPicture.asset(
                     'assets/svg/cometie_primary.svg',
+                    // height: context.h*0.035,
                     height: 28,
                   ),
                   label: 'Cometie',
@@ -113,10 +135,13 @@ class MainPage extends StatelessWidget {
             );
           }),
           Positioned(
+            // bottom: context.h*0.013,
             bottom: 10,
             child: SizedBox(
+              // height: context.h*0.0735,
               height: 60,
-              width: 60,
+              width: context.w*0.157,
+              // width: 60,
               child: FittedBox(
                 child: FloatingActionButton(
                   shape: const CircleBorder(),

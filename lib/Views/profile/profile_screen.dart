@@ -425,16 +425,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     return StreamBuilder<QuerySnapshot>(
                       stream: _stateController.profileFilterCometie.value==0?
                       FirebaseFirestore.instance.collection('Cometies')
-                          .where('uid', isEqualTo: _authController.uid)
+                          .where('uid', isEqualTo: _authController.userModel.uid)
                           .snapshots():_stateController.profileFilterCometie.value==1?
                       FirebaseFirestore.instance.collection('Cometies')
-                          .where('uid', isEqualTo: _authController.uid).where('status',isEqualTo: 'Pending')
+                          .where('uid', isEqualTo: _authController.userModel.uid).where('status',isEqualTo: 'Pending')
                           .snapshots():_stateController.profileFilterCometie.value==2?
                       FirebaseFirestore.instance.collection('Cometies')
-                          .where('uid', isEqualTo: _authController.uid).where('status',isEqualTo: 'Progress')
+                          .where('uid', isEqualTo: _authController.userModel.uid).where('status',isEqualTo: 'Progress')
                           .snapshots():
                       FirebaseFirestore.instance.collection('Cometies')
-                          .where('uid', isEqualTo: _authController.uid).where('status',isEqualTo: 'Completed')
+                          .where('uid', isEqualTo: _authController.userModel.uid).where('status',isEqualTo: 'Completed')
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {

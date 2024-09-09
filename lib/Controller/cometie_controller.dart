@@ -190,6 +190,28 @@ class CometieController extends GetxController {
     }
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> viewAllCometies() {
+    if (_stateController.cometieFilterIndex.value == 1) {
+      return FirebaseFirestore.instance
+          .collection('Cometies')
+          .where('status', isEqualTo: 'Pending')
+          .orderBy(
+        'createdAt',
+      )
+          .snapshots();
+    } else if (_stateController.cometieFilterIndex.value == 2) {
+      return FirebaseFirestore.instance
+          .collection('Cometies')
+          .where('status', isEqualTo: 'Pending')
+          .orderBy('creatorLocation')
+          .snapshots();
+    } else {
+      return FirebaseFirestore.instance
+          .collection('Cometies')
+          .where('status', isEqualTo: 'Pending').snapshots();
+    }
+  }
+
   Stream<List<DocumentSnapshot<Map<String, dynamic>>>>
       getCometiesReport() async* {
     // Get the IDs of the cometies the user has joined

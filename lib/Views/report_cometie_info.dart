@@ -89,71 +89,95 @@ class ReportCometieInfoScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 shadowColor: Colors.black,
-                child: ExpansionTile(
-                  backgroundColor: Colors.transparent,
-                  collapsedBackgroundColor: Colors.transparent,
-                  iconColor:Colors.black,
-                  collapsedIconColor: Colors.black,
-                  onExpansionChanged: (value){},
+                child: ListTile(
+                  onTap: ()async{
+                    var snap= await FirebaseFirestore.instance.collection('Cometies').doc(cometieId).get();
+                    var data= snap.data()!;
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MyPaymentDetailScreen(
+                        memberUid: _authController.userModel.uid,
+                        creatorId: data['uid'],
+                        cometieId: cometieId)));
+                  },
                   title: Text(
-                    'Payments',
+                   'Payments',
                     style: GoogleFonts.roboto(
                         fontSize: 20,
                         fontWeight: FontWeight.w400,
                         color: Colors.black),
                   ),
-                  children: [
-                    StreamBuilder(
-                      stream: FirebaseFirestore.instance.collection('Cometies').doc(cometieId).collection('Members').doc(_authController.userModel.uid).collection('Payments').snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Center(child: Text('Error: ${snapshot.error}'));
-                        } else if (snapshot.hasData) {
-                          return  ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data?.docs.length,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                onTap: ()async{
-                                  var snap= await FirebaseFirestore.instance.collection('Cometies').doc(cometieId).get();
-                                  var data= snap.data()!;
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyPaymentDetailScreen(
-                                      memberUid: _authController.userModel.uid,
-                                      creatorId: data['uid'],
-                                      cometieId: cometieId)));
-                                },
-                                title: Text(
-                                  snapshot.data!.docs[index].id.toString(),
-                                  style: GoogleFonts.roboto(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black),
-                                ),
-                                subtitle: Text(
-                                  snapshot.data!.docs[index]['paymentStatus'],
-                                  style: GoogleFonts.roboto(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                      color: snapshot.data!.docs[index]['paymentStatus']=='Unpaid'?
-                                      Colors.redAccent:Colors.green
-                                  ),
-                                ),
-                                trailing: const Icon(Icons.arrow_forward_ios,color: Colors.black,),
-                              );
-                            },
-                          );
-
-                        } else {
-                          return const Center(child: Text('Something went wrong!'));
-                        }
-                      },
-                    )
-                  ],
+                  trailing: const Icon(Icons.arrow_forward_ios,color: Colors.black,),
                 ),
               ),
+              // Card(
+              //   color: const Color(0xffE9F0FF),
+              //   shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(20)),
+              //   shadowColor: Colors.black,
+              //   child: ExpansionTile(
+              //     backgroundColor: Colors.transparent,
+              //     collapsedBackgroundColor: Colors.transparent,
+              //     iconColor:Colors.black,
+              //     collapsedIconColor: Colors.black,
+              //     onExpansionChanged: (value){},
+              //     title: Text(
+              //       'Payments',
+              //       style: GoogleFonts.roboto(
+              //           fontSize: 20,
+              //           fontWeight: FontWeight.w400,
+              //           color: Colors.black),
+              //     ),
+              //     children: [
+              //       StreamBuilder(
+              //         stream: FirebaseFirestore.instance.collection('Cometies').doc(cometieId).collection('Members').doc(_authController.userModel.uid).collection('Payments').snapshots(),
+              //         builder: (context, snapshot) {
+              //           if (snapshot.connectionState == ConnectionState.waiting) {
+              //             return const Center(child: CircularProgressIndicator());
+              //           } else if (snapshot.hasError) {
+              //             return Center(child: Text('Error: ${snapshot.error}'));
+              //           } else if (snapshot.hasData) {
+              //             return  ListView.builder(
+              //               shrinkWrap: true,
+              //               itemCount: snapshot.data?.docs.length,
+              //               physics: const NeverScrollableScrollPhysics(),
+              //               itemBuilder: (context, index) {
+              //                 return ListTile(
+              //                   onTap: ()async{
+              //                     var snap= await FirebaseFirestore.instance.collection('Cometies').doc(cometieId).get();
+              //                     var data= snap.data()!;
+              //                     Navigator.push(context, MaterialPageRoute(builder: (context)=>MyPaymentDetailScreen(
+              //                         memberUid: _authController.userModel.uid,
+              //                         creatorId: data['uid'],
+              //                         cometieId: cometieId)));
+              //                   },
+              //                   title: Text(
+              //                     snapshot.data!.docs[index].id.toString(),
+              //                     style: GoogleFonts.roboto(
+              //                         fontSize: 20,
+              //                         fontWeight: FontWeight.w400,
+              //                         color: Colors.black),
+              //                   ),
+              //                   subtitle: Text(
+              //                     snapshot.data!.docs[index]['paymentStatus'],
+              //                     style: GoogleFonts.roboto(
+              //                         fontSize: 15,
+              //                         fontWeight: FontWeight.w400,
+              //                         color: snapshot.data!.docs[index]['paymentStatus']=='Unpaid'?
+              //                         Colors.redAccent:Colors.green
+              //                     ),
+              //                   ),
+              //                   trailing: const Icon(Icons.arrow_forward_ios,color: Colors.black,),
+              //                 );
+              //               },
+              //             );
+              //
+              //           } else {
+              //             return const Center(child: Text('Something went wrong!'));
+              //           }
+              //         },
+              //       )
+              //     ],
+              //   ),
+              // ),
               Card(
                 color: const Color(0xffE9F0FF),
                 shape: RoundedRectangleBorder(
@@ -187,7 +211,7 @@ class ReportCometieInfoScreen extends StatelessWidget {
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return ListTile(
-                                contentPadding: const EdgeInsets.only(right: 15),
+                                contentPadding: const EdgeInsets.only(right: 15,bottom: 10),
                                 leading: CircleAvatar(
                                   radius: 40,
                                   backgroundImage: snapshot.data?.docs[index]['memberProfilePic']==''?

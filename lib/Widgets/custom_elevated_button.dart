@@ -29,13 +29,15 @@ class CustomElevatedButton extends StatelessWidget {
           elevation: WidgetStatePropertyAll(btnElevation),
           backgroundColor: WidgetStatePropertyAll(bgColor),
         ),
-        child: Text(
-          title,
-          style: GoogleFonts.alef(
-              fontSize: titleSize,
-              fontWeight: FontWeight.w400,
-              color: titleColor,
-              letterSpacing: 2),
+        child: FittedBox(
+          child: Text(
+            title,
+            style: GoogleFonts.alef(
+                fontSize: titleSize,
+                fontWeight: FontWeight.w400,
+                color: titleColor,
+                letterSpacing: 2),
+          ),
         )
     );
 
