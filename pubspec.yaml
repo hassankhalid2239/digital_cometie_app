@@ -58,6 +58,8 @@ dependencies:
   rxdart:
   dotted_border:
   insta_image_viewer:
+  simple_animations: ^3.0.0
+  supercharged:
 dev_dependencies:
   flutter_test:
     sdk: flutter

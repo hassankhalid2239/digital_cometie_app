@@ -1,3 +1,4 @@
+import 'package:digital_cometie_app/Animations/fade_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,31 +27,40 @@ class SetIban extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                height: 315,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                    color: Color(0xffE9F0FF),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30))),
-                child: Center(
-                  child: Column(
-                    children: [
-                      const Image(
-                        image: AssetImage('assets/images/setiban.png'),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      Text(
-                        'Set IBAN',
-                        style: GoogleFonts.lora(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 40,
-                            color: Colors.black),
-                      )
-                    ],
+              FadeAnimation(
+                1,
+                 Container(
+                  height: 315,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                      color: Color(0xffE9F0FF),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(30),
+                          bottomRight: Radius.circular(30))),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        FadeAnimation(
+                          1,
+                           const Image(
+                            image: AssetImage('assets/images/setiban.png'),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        FadeAnimation(
+                          1,
+                           Text(
+                            'Set IBAN',
+                            style: GoogleFonts.lora(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 40,
+                                color: Colors.black),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -59,8 +69,11 @@ class SetIban extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: CustomTextFormField(
-                    controller: _ibanController, hintText: 'Enter IBAN'),
+                child: FadeAnimation2(
+                  2,
+                   CustomTextFormField(
+                      controller: _ibanController, hintText: 'Enter IBAN'),
+                ),
               ),
               const SizedBox(
                 height: 50,

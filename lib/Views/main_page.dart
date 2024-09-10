@@ -12,7 +12,7 @@ import 'create_cometie/create_screen.dart';
 import 'home_screen.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({super.key});
+  const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -56,8 +56,8 @@ class _MainPageState extends State<MainPage> {
         alignment: Alignment.bottomCenter,
         children: [
           Container(
-              // height: context.h*0.099,
-              height: 80,
+              height: context.h*0.099,
+              // height: 80,
               decoration:  BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(context.r(0.0261)),
@@ -82,8 +82,8 @@ class _MainPageState extends State<MainPage> {
               inactiveColor: Colors.grey,
               iconSize: context.r(0.066),
               // iconSize: 25,
-              // height: context.h*0.062,
-              height: 50,
+              height: context.h*0.062,
+              // height: 50,
               items: [
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
@@ -102,8 +102,8 @@ class _MainPageState extends State<MainPage> {
                   ),
                   activeIcon: SvgPicture.asset(
                     'assets/svg/cometie_primary.svg',
-                    // height: context.h*0.035,
-                    height: 28,
+                    height: context.h*0.035,
+                    // height: 28,
                   ),
                   label: 'Cometie',
                 ),
@@ -135,11 +135,11 @@ class _MainPageState extends State<MainPage> {
             );
           }),
           Positioned(
-            // bottom: context.h*0.013,
-            bottom: 10,
+            bottom: context.h*0.013,
+            // bottom: 10,
             child: SizedBox(
-              // height: context.h*0.0735,
-              height: 60,
+              height: context.h*0.0735,
+              // height: 60,
               width: context.w*0.157,
               // width: 60,
               child: FittedBox(
@@ -166,3 +166,9 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+
+
+
+
+
+

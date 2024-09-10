@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:digital_cometie_app/Animations/fade_animation.dart';
+import 'package:digital_cometie_app/Animations/fade_transitions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +18,7 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin{
 
   final _authController= Get.put(AuthController());
   @override
@@ -28,14 +30,14 @@ class _SplashScreenState extends State<SplashScreen> {
   void isLogin() {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      Future.delayed(const Duration(seconds: 1)).then((value) {
+      Future.delayed(const Duration(seconds: 2)).then((value) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => MainPage()),
                 (route) => false);
       });
     } else {
-      Future.delayed(const Duration(seconds: 1)).then((value)  {
+      Future.delayed(const Duration(seconds: 2)).then((value)  {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => SignUpScreen()),
@@ -60,20 +62,25 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Image(
-              height: 200,
-              width: 200,
-              image: AssetImage('assets/images/logo.jpg'),
+            FadeTransAnimation(
+              child: const Image(
+                height: 250,
+                width: 250,
+                image: AssetImage('assets/images/logo.jpg'),
+              ),
             ),
             const SizedBox(
               height: 50,
             ),
             FittedBox(
-              child: Text('WELCOME TO!',
-                  style: GoogleFonts.lora(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 35,
-                      color: Colors.white)),
+              child: FadeAnimation2(
+                1,
+                Text('WELCOME TO!',
+                    style: GoogleFonts.lora(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 35,
+                        color: Colors.white)),
+              ),
             ),
           ],
         ),

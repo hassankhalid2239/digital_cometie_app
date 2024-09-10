@@ -1,3 +1,8 @@
+import 'package:digital_cometie_app/Views/Auth/otp_screen.dart';
+import 'package:digital_cometie_app/Views/Auth/set_iban.dart';
+import 'package:digital_cometie_app/Views/Auth/set_location.dart';
+import 'package:digital_cometie_app/Views/Auth/set_profile.dart';
+import 'package:digital_cometie_app/Views/Auth/sign_up_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +36,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff003CBE)),
         useMaterial3: true,
       ),
-      home: const SplashScreen(),
+      home:  const SplashScreen(),
     );
   }
 }
